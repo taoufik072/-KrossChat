@@ -47,6 +47,7 @@ coil = "3.3.0"
 coil-network = "3.3.0"
 moko = "0.19.1"
 buildkonfig = "0.17.1"
+kermit ="2.1.0"
 
 projectApplicationId = "com.taoufikcode.krosschat"
 projectVersionName = "1.0"
@@ -92,6 +93,7 @@ jetbrains-compose-backhandler = { module = "org.jetbrains.compose.ui:ui-backhand
 jetbrains-compose-navigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
 
 # Koin
+koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
@@ -126,6 +128,9 @@ sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sql
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 
+#Logging
+touchlab-kermit= { module = "co.touchlab:kermit", version.ref = "kermit"}
+
 # Coil
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil-network" }
@@ -149,7 +154,6 @@ buildkonfig-compiler = { group = "com.codingfeline.buildkonfig", name = "buildko
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 
-koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin" }
 
 jetbrains-compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref="compose-jetbrains" }
 jetbrains-compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref="compose-jetbrains"}
@@ -211,5 +215,6 @@ ktor-common = [
     "ktor-client-core",
     "ktor-client-content-negotiation",
     "ktor-serialization-kotlinx-json",
-    "ktor-client-auth"
+    "ktor-client-auth",
+    "ktor-client-logging"
 ]

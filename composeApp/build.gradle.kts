@@ -10,6 +10,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
         }
         commonMain.dependencies {
+            implementation(projects.core.designsystem)
             implementation(projects.core.data)
             implementation(projects.core.domain)
             implementation(projects.core.presentation)

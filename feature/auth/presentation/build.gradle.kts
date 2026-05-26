@@ -19,9 +19,10 @@ kotlin {
                 implementation(projects.core.designsystem)
 
                 // Add KMP dependencies here
+                implementation(libs.bundles.koin.common)
+
                 implementation(compose.components.resources)
                 implementation(compose.components.uiToolingPreview)
-                implementation(libs.koin.core)
             }
         }
 

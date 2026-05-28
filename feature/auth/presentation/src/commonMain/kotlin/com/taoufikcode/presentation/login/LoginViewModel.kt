@@ -4,6 +4,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.taoufikcode.core.domain.auth.AuthService
+import com.taoufikcode.core.domain.auth.SessionStorage
 import com.taoufikcode.core.domain.util.DataError
 import com.taoufikcode.core.domain.util.onFailure
 import com.taoufikcode.core.domain.util.onSuccess
@@ -28,7 +29,8 @@ import krosschat.feature.auth.presentation.generated.resources.error_invalid_cre
 import krosschat.feature.auth.presentation.generated.resources.error_invalid_email
 
 class LoginViewModel(
-    private val authService: AuthService
+    private val authService: AuthService,
+    private val sessionStorage: SessionStorage
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false
@@ -105,6 +107,7 @@ class LoginViewModel(
                     password = password
                 )
                 .onSuccess { authInfo ->
+                    sessionStorage.set(authInfo)
                     _state.update { it.copy(
                         isLoggingIn = false
                     ) }

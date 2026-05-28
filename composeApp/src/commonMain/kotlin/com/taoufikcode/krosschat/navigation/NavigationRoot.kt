@@ -1,6 +1,7 @@
 package com.taoufikcode.krosschat.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,10 +11,10 @@ import com.taoufikcode.presentation.navigation.AuthGraphRoutes
 import com.taoufikcode.presentation.navigation.authGraph
 
 @Composable
-fun NavigationRoot(navController: NavHostController) {
+fun NavigationRoot(navController: NavHostController,startDestination: Any) {
     NavHost(
         navController = navController,
-        startDestination = AuthGraphRoutes.Graph
+        startDestination = startDestination
     ) {
         authGraph(
             navController = navController,

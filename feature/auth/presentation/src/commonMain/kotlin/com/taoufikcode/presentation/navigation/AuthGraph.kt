@@ -7,6 +7,7 @@ import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
 import com.taoufikcode.presentation.email_verification.EmailVerificationRoot
 import com.taoufikcode.presentation.email_verification.EmailVerificationScreen
+import com.taoufikcode.presentation.forgot_password.ForgotPasswordRoot
 import com.taoufikcode.presentation.login.LoginRoot
 import com.taoufikcode.presentation.register.RegisterRoot
 import com.taoufikcode.presentation.register_success.RegisterSuccessRoot
@@ -85,6 +86,10 @@ fun NavGraphBuilder.authGraph(
                     }
                 }
             )
+        }
+
+        composable<AuthGraphRoutes.ForgotPassword> {
+            ForgotPasswordRoot()
         }
     }
 }

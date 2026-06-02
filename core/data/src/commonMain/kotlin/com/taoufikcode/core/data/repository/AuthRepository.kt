@@ -1,4 +1,4 @@
-package com.taoufikcode.core.data.auth
+package com.taoufikcode.core.data.repository
 
 import com.taoufikcode.core.data.dto.AuthInfoDto
 import com.taoufikcode.core.data.dto.requests.EmailRequest
@@ -16,7 +16,7 @@ import com.taoufikcode.core.domain.util.Result
 import com.taoufikcode.core.domain.util.map
 import io.ktor.client.HttpClient
 
-class KtorService(private val httpClient: HttpClient
+class AuthRepository(private val httpClient: HttpClient
 ): AuthService {
     override suspend fun login(email: String, password: String) : Result<AuthInfo, DataError.Remote> {
         return httpClient.post<LoginRequest, AuthInfoDto>(

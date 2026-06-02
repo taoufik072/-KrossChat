@@ -1,7 +1,7 @@
 package com.taoufikcode.core.data.di
 
 import com.taoufikcode.core.data.auth.DataStoreSessionStorage
-import com.taoufikcode.core.data.auth.KtorService
+import com.taoufikcode.core.data.repository.AuthRepository
 import com.taoufikcode.core.data.logging.KermitLogger
 import com.taoufikcode.core.data.network.HttpClientFactory
 import com.taoufikcode.core.domain.auth.AuthService
@@ -20,6 +20,6 @@ val coreDataModule = module {
     single {
         HttpClientFactory(get(),get()).create(get())
     }
-    singleOf(::KtorService) bind AuthService::class
+    singleOf(::AuthRepository) bind AuthService::class
     singleOf(::DataStoreSessionStorage) bind SessionStorage::class
 }

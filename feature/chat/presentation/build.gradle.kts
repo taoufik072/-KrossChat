@@ -21,6 +21,11 @@ kotlin {
 
                 implementation(compose.components.resources)
                 implementation(compose.components.uiToolingPreview)
+
+                implementation(libs.material3.adaptive)
+                implementation(libs.material3.adaptive.layout)
+                implementation(libs.material3.adaptive.navigation)
+                implementation(libs.jetbrains.compose.backhandler)
             }
         }
 

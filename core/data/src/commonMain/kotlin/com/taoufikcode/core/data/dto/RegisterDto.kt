@@ -1,9 +1,9 @@
-package com.taoufikcode.core.data.dto.requests
+package com.taoufikcode.core.data.dto
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-class RegisterRequest(
+class RegisterDto(
     val email: String,
     val username: String,
     val password: String

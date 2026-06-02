@@ -18,9 +18,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.plcoding.chat.presentation.components.ManageChatButtonSection
+import com.taoufikcode.chat.domain.models.Chat
 import com.taoufikcode.chat.presentation.components.ChatParticipantSearchTextSection
 import com.taoufikcode.chat.presentation.components.ChatParticipantsSelectionSection
+import com.taoufikcode.chat.presentation.components.ManageChatButtonSection
 import com.taoufikcode.chat.presentation.components.ManageChatHeaderRow
 import com.taoufikcode.core.designsystem.components.brand.KrossHorizontalDivider
 import com.taoufikcode.core.designsystem.components.buttons.KrossButton
@@ -28,6 +29,7 @@ import com.taoufikcode.core.designsystem.components.buttons.KrossButtonStyle
 import com.taoufikcode.core.designsystem.components.dialogs.KrossAdaptiveDialogSheetLayout
 import com.taoufikcode.core.designsystem.theme.KrossChatTheme
 import com.taoufikcode.core.presentation.utils.DeviceConfiguration
+import com.taoufikcode.core.presentation.utils.ObserveAsEvents
 import com.taoufikcode.core.presentation.utils.clearFocusOnTap
 import com.taoufikcode.core.presentation.utils.currentDeviceConfiguration
 import krosschat.feature.chat.presentation.generated.resources.Res
@@ -40,9 +42,16 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun CreateChatRoot(
     onDismiss: () -> Unit,
+    onChatCreated: (Chat) -> Unit,
     viewModel: CreateChatViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    ObserveAsEvents(viewModel.events) { event ->
+        when (event) {
+            is CreateChatEvent.OnChatCreated -> onChatCreated(event.chat)
+        }
+    }
 
     KrossAdaptiveDialogSheetLayout(
         onDismiss = onDismiss
@@ -50,7 +59,7 @@ fun CreateChatRoot(
         CreateChatScreen(
             state = state,
             onAction = { action ->
-                when(action) {
+                when (action) {
                     CreateChatAction.OnDismissDialog -> onDismiss()
                     else -> Unit
                 }
@@ -138,10 +147,12 @@ fun CreateChatScreen(
                     style = KrossButtonStyle.SECONDARY
                 )
             },
+            error = state.createChatError?.asString(),
             modifier = Modifier.fillMaxWidth()
         )
     }
 }
+
 @Preview
 @Composable
 private fun Preview() {

@@ -97,7 +97,7 @@ fun ChatParticipantListItem(
         )
         Text(
             text = participantUi.username,
-            style = MaterialTheme.typography.titleSmall,
+            style = MaterialTheme.typography.titleXSmall,
             color = MaterialTheme.colorScheme.extended.textPrimary,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis

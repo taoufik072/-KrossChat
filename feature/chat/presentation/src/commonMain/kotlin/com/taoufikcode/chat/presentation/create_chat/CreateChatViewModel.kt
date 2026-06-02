@@ -4,7 +4,7 @@ import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.taoufikcode.chat.domain.ChatParticipantService
+import com.taoufikcode.chat.domain.ChatService
 import com.taoufikcode.chat.presentation.mappers.toUi
 import com.taoufikcode.core.domain.util.DataError
 import com.taoufikcode.core.domain.util.onFailure
@@ -12,12 +12,14 @@ import com.taoufikcode.core.domain.util.onSuccess
 import com.taoufikcode.core.presentation.mapper.toUiText
 import com.taoufikcode.core.presentation.utils.UiText
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -27,13 +29,15 @@ import kotlin.time.Duration.Companion.seconds
 
 @OptIn(FlowPreview::class)
 class CreateChatViewModel(
-    private val chatParticipantService: ChatParticipantService
+    private val chatService: ChatService
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false
 
     private val _state = MutableStateFlow(CreateChatState())
 
+    private val eventChannel = Channel<CreateChatEvent>()
+    val events = eventChannel.receiveAsFlow()
     private val searchFlow = snapshotFlow { _state.value.queryTextState.text.toString() }
         .debounce(1.seconds)
         .onEach { query ->
@@ -56,11 +60,44 @@ class CreateChatViewModel(
     fun onAction(action: CreateChatAction) {
         when (action) {
             CreateChatAction.OnAddClick -> addParticipant()
-            CreateChatAction.OnCreateChatClick -> {
+            CreateChatAction.OnCreateChatClick -> createChat()
+            CreateChatAction.OnDismissDialog -> Unit
+        }
+    }
 
+    private fun createChat() {
+        val userIds = state.value.selectedChatParticipants.map { it.id }
+        if (userIds.isEmpty()) {
+            return
+        }
+
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    isCreatingChat = true,
+                    canAddParticipant = false
+                )
             }
 
-            CreateChatAction.OnDismissDialog -> Unit
+            chatService
+                .createChat(userIds)
+                .onSuccess { chat ->
+                    _state.update {
+                        it.copy(
+                            isCreatingChat = false
+                        )
+                    }
+                    eventChannel.send(CreateChatEvent.OnChatCreated(chat))
+                }
+                .onFailure { error ->
+                    _state.update {
+                        it.copy(
+                            createChatError = error.toUiText(),
+                            canAddParticipant = it.currentSearchResult != null && !it.isSearching,
+                            isCreatingChat = false
+                        )
+                    }
+                }
         }
     }
 
@@ -102,7 +139,7 @@ class CreateChatViewModel(
                 )
             }
 
-            chatParticipantService
+            chatService
                 .searchParticipant(query)
                 .onSuccess { participant ->
                     _state.update {

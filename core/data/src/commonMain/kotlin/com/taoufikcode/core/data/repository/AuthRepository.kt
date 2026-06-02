@@ -1,10 +1,10 @@
 package com.taoufikcode.core.data.repository
 
 import com.taoufikcode.core.data.dto.AuthInfoDto
-import com.taoufikcode.core.data.dto.requests.EmailRequest
-import com.taoufikcode.core.data.dto.requests.LoginRequest
-import com.taoufikcode.core.data.dto.requests.RegisterRequest
-import com.taoufikcode.core.data.dto.requests.ResetPasswordRequest
+import com.taoufikcode.core.data.dto.EmailDto
+import com.taoufikcode.core.data.dto.LoginDto
+import com.taoufikcode.core.data.dto.RegisterDto
+import com.taoufikcode.core.data.dto.ResetPasswordDto
 import com.taoufikcode.core.data.dto.toDomain
 import com.taoufikcode.core.data.network.get
 import com.taoufikcode.core.data.network.post
@@ -19,9 +19,9 @@ import io.ktor.client.HttpClient
 class AuthRepository(private val httpClient: HttpClient
 ): AuthService {
     override suspend fun login(email: String, password: String) : Result<AuthInfo, DataError.Remote> {
-        return httpClient.post<LoginRequest, AuthInfoDto>(
+        return httpClient.post<LoginDto, AuthInfoDto>(
             route = "/auth/login",
-            body = LoginRequest(
+            body = LoginDto(
                 email = email,
                 password = password
             )
@@ -37,7 +37,7 @@ class AuthRepository(private val httpClient: HttpClient
     ): EmptyResult<DataError.Remote> {
         return httpClient.post(
             route = "/auth/register",
-            body = RegisterRequest(
+            body = RegisterDto(
                 email = email,
                 username = username,
                 password = password
@@ -55,14 +55,14 @@ class AuthRepository(private val httpClient: HttpClient
     override suspend fun resendVerificationEmail(email: String): EmptyResult<DataError.Remote> {
         return httpClient.post(
             route = "/auth/resend-verification",
-            body = EmailRequest(email),
+            body = EmailDto(email),
         )
     }
 
     override suspend fun forgotPassword(email: String): EmptyResult<DataError.Remote> {
-        return httpClient.post<EmailRequest, Unit>(
+        return httpClient.post<EmailDto, Unit>(
             route = "/auth/forgot-password",
-            body = EmailRequest(email)
+            body = EmailDto(email)
         )
     }
 
@@ -72,7 +72,7 @@ class AuthRepository(private val httpClient: HttpClient
     ): EmptyResult<DataError.Remote> {
         return httpClient.post(
             route = "/auth/reset-password",
-            body = ResetPasswordRequest(
+            body = ResetPasswordDto(
                 newPassword = newPassword,
                 token = token
             )

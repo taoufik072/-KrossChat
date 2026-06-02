@@ -3,7 +3,7 @@ package com.taoufikcode.core.data.network
 import com.taoufikcode.core.data.BuildKonfig
 import com.taoufikcode.core.data.auth.DataStoreSessionStorage
 import com.taoufikcode.core.data.dto.AuthInfoDto
-import com.taoufikcode.core.data.dto.requests.RefreshRequest
+import com.taoufikcode.core.data.dto.RefreshDto
 import com.taoufikcode.core.data.dto.toDomain
 import com.taoufikcode.core.domain.logging.KrossChatLogger
 import com.taoufikcode.core.domain.util.onFailure
@@ -83,9 +83,9 @@ class HttpClientFactory(
                         }
                         var bearerTokens: BearerTokens? = null
 
-                        client.post<RefreshRequest, AuthInfoDto>(
+                        client.post<RefreshDto, AuthInfoDto>(
                             route = "/auth/refresh",
-                            body = RefreshRequest(authInfo.refreshToken),
+                            body = RefreshDto(authInfo.refreshToken),
                             builder = {
                                 markAsRefreshTokenRequest()
                             }).onSuccess { newAuthInfo ->

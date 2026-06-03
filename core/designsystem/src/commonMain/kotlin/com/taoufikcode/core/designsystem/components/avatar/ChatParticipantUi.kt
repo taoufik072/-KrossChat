@@ -1,6 +1,9 @@
 package com.taoufikcode.core.designsystem.components.avatar
 
-data class AvatarUi(
+import androidx.compose.runtime.Immutable
+
+@Immutable
+data class ChatParticipantUi(
     val id: String,
     val username: String,
     val initials: String,

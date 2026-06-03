@@ -5,7 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
-import com.taoufikcode.chat.presentation.chat_list.ChatListRoute
+import com.taoufikcode.chat.presentation.navigation.ChatGraphRoutes
 import com.taoufikcode.core.designsystem.theme.KrossChatTheme
 import com.taoufikcode.core.presentation.utils.ObserveAsEvents
 import com.taoufikcode.krosschat.navigation.DeepLinkListener
@@ -46,7 +46,7 @@ fun App(
             NavigationRoot(
                 navController = navController,
                 startDestination = if(state.isLoggedIn) {
-                    ChatListRoute
+                    ChatGraphRoutes.Graph
                 } else {
                     AuthGraphRoutes.Graph
                 }

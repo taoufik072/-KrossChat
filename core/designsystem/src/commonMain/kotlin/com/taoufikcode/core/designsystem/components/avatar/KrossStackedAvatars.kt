@@ -11,7 +11,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun KrossStackedAvatars(
-    avatars: List<AvatarUi>,
+    avatars: List<ChatParticipantUi>,
     modifier: Modifier = Modifier,
     size: AvatarSize = AvatarSize.SMALL,
     maxVisible: Int = 2,
@@ -51,22 +51,22 @@ fun KrossStackedAvatarsPreview() {
     KrossChatTheme {
         KrossStackedAvatars(
             avatars = listOf(
-                AvatarUi(
+                ChatParticipantUi(
                     id = "1",
                     username = "Taoufik",
                     initials = "TB",
                 ),
-                AvatarUi(
+                ChatParticipantUi(
                     id = "2",
                     username = "Gabr",
                     initials = "GB",
                 ),
-                AvatarUi(
+                ChatParticipantUi(
                     id = "3",
                     username = "Isso",
                     initials = "IS",
                 ),
-                AvatarUi(
+                ChatParticipantUi(
                     id = "4",
                     username = "Taoufik",
                     initials = "TB",

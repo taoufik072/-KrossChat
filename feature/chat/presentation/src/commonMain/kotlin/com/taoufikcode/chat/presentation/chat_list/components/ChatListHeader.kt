@@ -23,6 +23,8 @@ import com.taoufikcode.chat.presentation.components.ChatHeader
 import com.taoufikcode.core.designsystem.components.avatar.ChatParticipantUi
 import com.taoufikcode.core.designsystem.components.avatar.KrossAvatarPhoto
 import com.taoufikcode.core.designsystem.components.brand.KrossHorizontalDivider
+import com.taoufikcode.core.designsystem.components.dropdown.DropDownItem
+import com.taoufikcode.core.designsystem.components.dropdown.KrossDropDownMenu
 import com.taoufikcode.core.designsystem.theme.KrossChatTheme
 import com.taoufikcode.core.designsystem.theme.extended
 import krosschat.core.designsystem.generated.resources.log_out_icon
@@ -107,28 +109,23 @@ fun ProfileAvatarSection(
                 color = MaterialTheme.colorScheme.extended.surfaceOutline
             )
         ) {
-            DropdownMenuItem(
-                text = {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Icon(
-                            imageVector = vectorResource(DesignSystemRes.drawable.users_icon),
-                            contentDescription = stringResource(Res.string.profile_settings),
-                            tint = MaterialTheme.colorScheme.extended.textSecondary,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Text(
-                            text = stringResource(Res.string.profile_settings),
-                            color = MaterialTheme.colorScheme.extended.textSecondary,
-                            fontWeight = FontWeight.Medium
-                        )
-                    }
-                },
-                onClick = {
-                    onDismissMenu()
-                    onProfileSettingsClick()
-                }
+            KrossDropDownMenu(
+                isOpen = isMenuOpen,
+                onDismiss = onDismissMenu,
+                items = listOf(
+                    DropDownItem(
+                        title = stringResource(Res.string.profile_settings),
+                        icon = vectorResource(DesignSystemRes.drawable.users_icon),
+                        contentColor = MaterialTheme.colorScheme.extended.textSecondary,
+                        onClick = onProfileSettingsClick
+                    ),
+                    DropDownItem(
+                        title = stringResource(Res.string.logout),
+                        icon = vectorResource(DesignSystemRes.drawable.log_out_icon),
+                        contentColor = MaterialTheme.colorScheme.extended.destructiveHover,
+                        onClick = onLogoutClick
+                    ),
+                )
             )
             KrossHorizontalDivider()
             DropdownMenuItem(

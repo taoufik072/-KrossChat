@@ -7,10 +7,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.taoufikcode.core.presentation.utils.DeviceConfiguration
 import com.taoufikcode.core.presentation.utils.currentDeviceConfiguration
-import kotlin.collections.emptyList
 
 @Composable
-fun createNoSpacingPaneScaffoldDirective(): PaneScaffoldDirective {
+fun krossPaneScaffoldDirective(): PaneScaffoldDirective {
     val configuration = currentDeviceConfiguration()
     val windowAdaptiveInfo = currentWindowAdaptiveInfo()
 

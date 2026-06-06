@@ -113,13 +113,13 @@ fun ChatListItemUiPreview() {
                 otherParticipants = listOf(
                     ChatParticipantUi(
                         id = "2",
-                        username = "Cinderella",
-                        initials = "CI",
+                        username = "Taoufik",
+                        initials = "GH",
                     ),
                     ChatParticipantUi(
                         id = "3",
-                        username = "Josh",
-                        initials = "JO",
+                        username = "Taoufik",
+                        initials = "TD",
                     )
                 ),
                 lastMessage = ChatMessage(

@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.taoufikcode.chat.presentation.chat_list_detail.ChatListDetailAdaptiveLayout
+import com.taoufikcode.chat.presentation.chat_list_detail.ChatListDetailRoot
 import kotlinx.serialization.Serializable
 
 sealed interface ChatGraphRoutes {
@@ -22,7 +22,7 @@ fun NavGraphBuilder.chatGraph(
         startDestination = ChatGraphRoutes.ChatListDetailRoute
     ) {
         composable<ChatGraphRoutes.ChatListDetailRoute> {
-            ChatListDetailAdaptiveLayout(
+            ChatListDetailRoot(
                 onLogout = {
                     // TODO: Logout user
                 }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -42,7 +43,7 @@ import krosschat.core.designsystem.generated.resources.Res as DesignSystemRes
 
 @Composable
 fun ChatDetailHeader(
-    chatUi: ChatUi,
+    chatUi: ChatUi?,
     isDetailPresent: Boolean,
     isChatOptionsDropDownOpen: Boolean,
     onChatOptionsClick: () -> Unit,
@@ -52,7 +53,6 @@ fun ChatDetailHeader(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val isGroupChat = chatUi.otherParticipants.size > 1
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -75,15 +75,20 @@ fun ChatDetailHeader(
             }
         }
 
-        ChatItemHeaderRow(
-            chat = chatUi,
-            isGroupChat = isGroupChat,
-            modifier = Modifier
-                .weight(1f)
-                .clickable {
-                    onManageChatClick()
-                }
-        )
+        if (chatUi != null) {
+            val isGroupChat = chatUi.otherParticipants.size > 1
+            ChatItemHeaderRow(
+                chat = chatUi,
+                isGroupChat = isGroupChat,
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable {
+                        onManageChatClick()
+                    }
+            )
+        } else {
+            Spacer(modifier = Modifier.weight(1f))
+        }
 
         Box {
             KrossIconButton(
@@ -122,6 +127,54 @@ fun ChatDetailHeader(
 @Composable
 @Preview
 fun ChatDetailHeaderPreview() {
+    KrossChatTheme(darkTheme = true) {
+        Column(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.surface)
+                .fillMaxSize()
+        ) {
+            ChatHeader {
+                ChatDetailHeader(
+                    isDetailPresent = false,
+                    isChatOptionsDropDownOpen = false,
+                    chatUi = ChatUi(
+                        id = "1",
+                        currentUser = ChatParticipantUi(
+                            id = "1",
+                            username = "Taoufik",
+                            initials = "PH",
+                        ),
+                        otherParticipants = listOf(
+                            ChatParticipantUi(
+                                id = "2",
+                                username = "Taoufik",
+                                initials = "CI",
+                            )
+                        ),
+                        lastMessage = ChatMessage(
+                            id = "1",
+                            chatId = "1",
+                            content = "lorem ipsum dolor sit amet consectetur adipiscing elit sed" +
+                                    "do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                            createdAt = Clock.System.now(),
+                            senderId = "1"
+                        ),
+                        lastMessageSenderUsername = "Taoufik"
+                    ),
+                    onChatOptionsClick = {},
+                    onManageChatClick = {},
+                    onLeaveChatClick = {},
+                    onDismissChatOptions = {},
+                    onBackClick = {},
+                )
+            }
+        }
+    }
+}
+
+@Composable
+@Preview
+fun ChatDetailHeaderGroupPreview() {
     KrossChatTheme {
         Column(
             modifier = Modifier
@@ -136,30 +189,30 @@ fun ChatDetailHeaderPreview() {
                         id = "1",
                         currentUser = ChatParticipantUi(
                             id = "1",
-                            username = "Philipp",
-                            initials = "PH",
+                            username = "Taoufik",
+                            initials = "TA",
                         ),
                         otherParticipants = listOf(
                             ChatParticipantUi(
                                 id = "2",
-                                username = "Cinderella",
-                                initials = "CI",
+                                username = "Taoufik",
+                                initials = "GH",
                             ),
                             ChatParticipantUi(
                                 id = "3",
-                                username = "Josh",
-                                initials = "JO",
+                                username = "Taoufik",
+                                initials = "TD",
                             )
                         ),
                         lastMessage = ChatMessage(
                             id = "1",
                             chatId = "1",
-                            content = "This is a last chat message that was sent by Philipp " +
+                            content = "This is a last chat message that was sent by Taoufik " +
                                     "and goes over multiple lines to showcase the ellipsis",
                             createdAt = Clock.System.now(),
                             senderId = "1"
                         ),
-                        lastMessageSenderUsername = "Philipp"
+                        lastMessageSenderUsername = "Taoufik"
                     ),
                     onChatOptionsClick = {},
                     onManageChatClick = {},

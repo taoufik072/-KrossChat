@@ -5,7 +5,7 @@
     <string name="forgot_password">Forgot password?</string>
     <string name="set_new_password">Set a new password</string>
     <string name="new_password">New password</string>
-    <string name="account_successfully_created">Chirp account successfully created!</string>
+    <string name="account_successfully_created">Account successfully created!</string>
     <string name="verification_email_sent_to_x">We've sent a verification email to %1$s</string>
     <string name="resend_verification_email">Resend verification email</string>
     <string name="resent_verification_email">Successfully resent verification email</string>
@@ -25,8 +25,8 @@
     <string name="password">Password</string>
     <string name="email">Email</string>
     <string name="register">Register</string>
-    <string name="username_placeholder">Chirp</string>
-    <string name="email_placeholder">hello@chirp.com</string>
+    <string name="username_placeholder">username</string>
+    <string name="email_placeholder">hello@mail.com</string>
     <string name="login">Log In</string>
     <string name="username_hint">Use between 3 and 20 characters for your username</string>
     <string name="password_hint">Use 9+ characters, at least one digit and one uppercase letter</string>

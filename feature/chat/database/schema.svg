@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1140" height="790" viewBox="0 0 1140 790">
+<defs>
+  <marker id="aFk" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#4a5568"/></marker>
+  <marker id="aVw" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#28a566"/></marker>
+  <clipPath id="cchat"><rect x="60" y="80" width="240" height="90" rx="8"/></clipPath>
+  <clipPath id="cparticipant"><rect x="820" y="80" width="240" height="116" rx="8"/></clipPath>
+  <clipPath id="ccrossref"><rect x="440" y="310" width="240" height="116" rx="8"/></clipPath>
+  <clipPath id="cmessage"><rect x="60" y="510" width="240" height="220" rx="8"/></clipPath>
+  <clipPath id="clastmsg"><rect x="820" y="510" width="240" height="168" rx="8"/></clipPath>
+</defs>
+<rect width="1140" height="790" fill="#161b22"/>
+<path d="M300,125 L370,125 L370,368 L440,368" stroke="#4a5568" stroke-width="1.5" fill="none" marker-end="url(#aFk)"/>
+<text x="312" y="129" fill="#4a5568" font-size="11" font-family="monospace" font-weight="700" text-anchor="middle">1</text>
+<text x="428" y="372" fill="#4a5568" font-size="11" font-family="monospace" font-weight="700" text-anchor="middle">N</text>
+<path d="M820,138 L750,138 L750,368 L680,368" stroke="#4a5568" stroke-width="1.5" fill="none" marker-end="url(#aFk)"/>
+<text x="808" y="142" fill="#4a5568" font-size="11" font-family="monospace" font-weight="700" text-anchor="middle">1</text>
+<text x="692" y="372" fill="#4a5568" font-size="11" font-family="monospace" font-weight="700" text-anchor="middle">N</text>
+<path d="M180,170 L180,510" stroke="#4a5568" stroke-width="1.5" fill="none" marker-end="url(#aFk)"/>
+<text x="180" y="184" fill="#4a5568" font-size="11" font-family="monospace" font-weight="700" text-anchor="middle">1</text>
+<text x="180" y="502" fill="#4a5568" font-size="11" font-family="monospace" font-weight="700" text-anchor="middle">N</text>
+<path d="M940,196 L940,460 L312,460 L312,620 L300,620" stroke="#4a5568" stroke-width="1.5" fill="none" marker-end="url(#aFk)"/>
+<text x="940" y="210" fill="#4a5568" font-size="11" font-family="monospace" font-weight="700" text-anchor="middle">1</text>
+<text x="312" y="624" fill="#4a5568" font-size="11" font-family="monospace" font-weight="700" text-anchor="middle">N</text>
+<path d="M300,125 L760,125 L760,594 L820,594" stroke="#28a566" stroke-width="1.5" fill="none" stroke-dasharray="6,3" marker-end="url(#aVw)"/>
+<text x="312" y="129" fill="#28a566" font-size="11" font-family="monospace" font-weight="700" text-anchor="middle">1</text>
+<text x="808" y="598" fill="#28a566" font-size="11" font-family="monospace" font-weight="700" text-anchor="middle">0..1</text>
+<rect x="63" y="84" width="240" height="90" rx="8" fill="#000000" fill-opacity="0.4"/>
+<rect x="60" y="80" width="240" height="90" rx="8" fill="#1a1f2e" stroke="#30363d" stroke-width="1"/>
+<rect x="60" y="80" width="240" height="38" fill="#0d2644" clip-path="url(#cchat)"/>
+<text x="180" y="104" fill="#e6edf3" font-size="13" font-family="system-ui, sans-serif" font-weight="600" text-anchor="middle">ChatEntity</text>
+<line x1="60" y1="118" x2="300" y2="118" stroke="#30363d" stroke-width="1"/>
+<rect x="61" y="118" width="238" height="26" fill="#211d00"/>
+<rect x="70" y="124" width="22" height="14" rx="3" fill="#5a4200"/>
+<text x="81" y="134" fill="#e3b341" font-size="8" font-family="monospace" font-weight="700" text-anchor="middle">PK</text>
+<text x="98" y="135" fill="#e3b341" font-size="11.5" font-family="system-ui, monospace, sans-serif" font-weight="600">chatId</text>
+<text x="290" y="135" fill="#6e7681" font-size="10" font-family="monospace" text-anchor="end">String</text>
+<rect x="61" y="144" width="238" height="26" fill="#1e2433" clip-path="url(#cchat)"/>
+<line x1="61" y1="144" x2="299" y2="144" stroke="#30363d" stroke-width="0.5" opacity="0.5"/>
+<text x="70" y="161" fill="#cdd9e5" font-size="11.5" font-family="system-ui, monospace, sans-serif" font-weight="400">lastActivityAt</text>
+<text x="290" y="161" fill="#6e7681" font-size="10" font-family="monospace" text-anchor="end">Long</text>
+<rect x="60" y="80" width="240" height="90" rx="8" fill="none" stroke="#3d4e63" stroke-width="1"/>
+<rect x="823" y="84" width="240" height="116" rx="8" fill="#000000" fill-opacity="0.4"/>
+<rect x="820" y="80" width="240" height="116" rx="8" fill="#1a1f2e" stroke="#30363d" stroke-width="1"/>
+<rect x="820" y="80" width="240" height="38" fill="#0d2644" clip-path="url(#cparticipant)"/>
+<text x="940" y="104" fill="#e6edf3" font-size="13" font-family="system-ui, sans-serif" font-weight="600" text-anchor="middle">ChatParticipantEntity</text>
+<line x1="820" y1="118" x2="1060" y2="118" stroke="#30363d" stroke-width="1"/>
+<rect x="821" y="118" width="238" height="26" fill="#211d00"/>
+<rect x="830" y="124" width="22" height="14" rx="3" fill="#5a4200"/>
+<text x="841" y="134" fill="#e3b341" font-size="8" font-family="monospace" font-weight="700" text-anchor="middle">PK</text>
+<text x="858" y="135" fill="#e3b341" font-size="11.5" font-family="system-ui, monospace, sans-serif" font-weight="600">userId</text>
+<text x="1050" y="135" fill="#6e7681" font-size="10" font-family="monospace" text-anchor="end">String</text>
+<rect x="821" y="144" width="238" height="26" fill="#1e2433"/>
+<line x1="821" y1="144" x2="1059" y2="144" stroke="#30363d" stroke-width="0.5" opacity="0.5"/>
+<text x="830" y="161" fill="#cdd9e5" font-size="11.5" font-family="system-ui, monospace, sans-serif" font-weight="400">username</text>
+<text x="1050" y="161" fill="#6e7681" font-size="10" font-family="monospace" text-anchor="end">String</text>
+<rect x="821" y="170" width="238" height="26" fill="#1a1f2e" clip-path="url(#cparticipant)"/>
+<line x1="821" y1="170" x2="1059" y2="170" stroke="#30363d" stroke-width="0.5" opacity="0.5"/>
+<text x="830" y="187" fill="#cdd9e5" font-size="11.5" font-family="system-ui, monospace, sans-serif" font-weight="400">profilePictureUrl</text>
+<text x="1050" y="187" fill="#6e7681" font-size="10" font-family="monospace" text-anchor="end">String?</text>
+<rect x="820" y="80" width="240" height="116" rx="8" fill="none" stroke="#3d4e63" stroke-width="1"/>
+<rect x="443" y="314" width="240" height="116" rx="8" fill="#000000" fill-opacity="0.4"/>
+<rect x="440" y="310" width="240" height="116" rx="8" fill="#1a1f2e" stroke="#30363d" stroke-width="1"/>
+<rect x="440" y="310" width="240" height="38" fill="#0d2644" clip-path="url(#ccrossref)"/>
+<text x="560" y="334" fill="#e6edf3" font-size="13" font-family="system-ui, sans-serif" font-weight="600" text-anchor="middle">ChatParticipantCrossRef</text>
+<line x1="440" y1="348" x2="680" y2="348" stroke="#30363d" stroke-width="1"/>
+<rect x="441" y="348" width="238" height="26" fill="#211d00"/>
+<rect x="450" y="354" width="38" height="14" rx="3" fill="#3a2a00"/>
+<text x="469" y="364" fill="#e3b341" font-size="8" font-family="monospace" font-weight="700" text-anchor="middle">PK·FK</text>
+<text x="494" y="365" fill="#e3b341" font-size="11.5" font-family="system-ui, monospace, sans-serif" font-weight="600">chatId</text>
+<text x="670" y="365" fill="#6e7681" font-size="10" font-family="monospace" text-anchor="end">String</text>
+<rect x="441" y="374" width="238" height="26" fill="#211d00"/>
+<line x1="441" y1="374" x2="679" y2="374" stroke="#30363d" stroke-width="0.5" opacity="0.5"/>
+<rect x="450" y="380" width="38" height="14" rx="3" fill="#3a2a00"/>
+<text x="469" y="390" fill="#e3b341" font-size="8" font-family="monospace" font-weight="700" text-anchor="middle">PK·FK</text>
+<text x="494" y="391" fill="#e3b341" font-size="11.5" font-family="system-ui, monospace, sans-serif" font-weight="600">userId</text>
+<text x="670" y="391" fill="#6e7681" font-size="10" font-family="monospace" text-anchor="end">String</text>
+<rect x="441" y="400" width="238" height="26" fill="#1a1f2e" clip-path="url(#ccrossref)"/>
+<line x1="441" y1="400" x2="679" y2="400" stroke="#30363d" stroke-width="0.5" opacity="0.5"/>
+<text x="450" y="417" fill="#cdd9e5" font-size="11.5" font-family="system-ui, monospace, sans-serif" font-weight="400">isActive</text>
+<text x="670" y="417" fill="#6e7681" font-size="10" font-family="monospace" text-anchor="end">Boolean</text>
+<rect x="440" y="310" width="240" height="116" rx="8" fill="none" stroke="#3d4e63" stroke-width="1"/>
+<rect x="63" y="514" width="240" height="220" rx="8" fill="#000000" fill-opacity="0.4"/>
+<rect x="60" y="510" width="240" height="220" rx="8" fill="#1a1f2e" stroke="#30363d" stroke-width="1"/>
+<rect x="60" y="510" width="240" height="38" fill="#0d2644" clip-path="url(#cmessage)"/>
+<text x="180" y="534" fill="#e6edf3" font-size="13" font-family="system-ui, sans-serif" font-weight="600" text-anchor="middle">ChatMessageEntity</text>
+<line x1="60" y1="548" x2="300" y2="548" stroke="#30363d" stroke-width="1"/>
+<rect x="61" y="548" width="238" height="26" fill="#211d00"/>
+<rect x="70" y="554" width="22" height="14" rx="3" fill="#5a4200"/>
+<text x="81" y="564" fill="#e3b341" font-size="8" font-family="monospace" font-weight="700" text-anchor="middle">PK</text>
+<text x="98" y="565" fill="#e3b341" font-size="11.5" font-family="system-ui, monospace, sans-serif" font-weight="600">messageId</text>
+<text x="290" y="565" fill="#6e7681" font-size="10" font-family="monospace" text-anchor="end">String</text>
+<rect x="61" y="574" width="238" height="26" fill="#001428"/>
+<line x1="61" y1="574" x2="299" y2="574" stroke="#30363d" stroke-width="0.5" opacity="0.5"/>
+<rect x="70" y="580" width="22" height="14" rx="3" fill="#0d3a6a"/>
+<text x="81" y="590" fill="#79c0ff" font-size="8" font-family="monospace" font-weight="700" text-anchor="middle">FK</text>
+<text x="98" y="591" fill="#58a6ff" font-size="11.5" font-family="system-ui, monospace, sans-serif" font-weight="400">chatId</text>
+<text x="290" y="591" fill="#6e7681" font-size="10" font-family="monospace" text-anchor="end">String</text>
+<rect x="61" y="600" width="238" height="26" fill="#001428"/>
+<line x1="61" y1="600" x2="299" y2="600" stroke="#30363d" stroke-width="0.5" opacity="0.5"/>
+<rect x="70" y="606" width="22" height="14" rx="3" fill="#0d3a6a"/>
+<text x="81" y="616" fill="#79c0ff" font-size="8" font-family="monospace" font-weight="700" text-anchor="middle">FK</text>
+<text x="98" y="617" fill="#58a6ff" font-size="11.5" font-family="system-ui, monospace, sans-serif" font-weight="400">senderId</text>
+<text x="290" y="617" fill="#6e7681" font-size="10" font-family="monospace" text-anchor="end">String</text>
+<rect x="61" y="626" width="238" height="26" fill="#1e2433"/>
+<line x1="61" y1="626" x2="299" y2="626" stroke="#30363d" stroke-width="0.5" opacity="0.5"/>
+<text x="70" y="643" fill="#cdd9e5" font-size="11.5" font-family="system-ui, monospace, sans-serif" font-weight="400">content</text>
+<text x="290" y="643" fill="#6e7681" font-size="10" font-family="monospace" text-anchor="end">String</text>
+<rect x="61" y="652" width="238" height="26" fill="#1a1f2e"/>
+<line x1="61" y1="652" x2="299" y2="652" stroke="#30363d" stroke-width="0.5" opacity="0.5"/>
+<text x="70" y="669" fill="#cdd9e5" font-size="11.5" font-family="system-ui, monospace, sans-serif" font-weight="400">timestamp</text>
+<text x="290" y="669" fill="#6e7681" font-size="10" font-family="monospace" text-anchor="end">Long</text>
+<rect x="61" y="678" width="238" height="26" fill="#1e2433"/>
+<line x1="61" y1="678" x2="299" y2="678" stroke="#30363d" stroke-width="0.5" opacity="0.5"/>
+<text x="70" y="695" fill="#cdd9e5" font-size="11.5" font-family="system-ui, monospace, sans-serif" font-weight="400">deliveryStatus</text>
+<text x="290" y="695" fill="#6e7681" font-size="10" font-family="monospace" text-anchor="end">String</text>
+<rect x="61" y="704" width="238" height="26" fill="#1a1f2e" clip-path="url(#cmessage)"/>
+<line x1="61" y1="704" x2="299" y2="704" stroke="#30363d" stroke-width="0.5" opacity="0.5"/>
+<text x="70" y="721" fill="#cdd9e5" font-size="11.5" font-family="system-ui, monospace, sans-serif" font-weight="400">deliveryStatusTimestamp</text>
+<text x="290" y="721" fill="#6e7681" font-size="10" font-family="monospace" text-anchor="end">Long</text>
+<rect x="60" y="510" width="240" height="220" rx="8" fill="none" stroke="#3d4e63" stroke-width="1"/>
+<rect x="823" y="514" width="240" height="168" rx="8" fill="#000000" fill-opacity="0.4"/>
+<rect x="820" y="510" width="240" height="168" rx="8" fill="#1a1f2e" stroke="#30363d" stroke-width="1"/>
+<rect x="820" y="510" width="240" height="38" fill="#0d2e1e" clip-path="url(#clastmsg)"/>
+<text x="940" y="534" fill="#e6edf3" font-size="13" font-family="system-ui, sans-serif" font-weight="600" text-anchor="middle">last_message_view_per_chat</text>
+<rect x="1018" y="522" width="34" height="14" rx="3" fill="#0f4a35"/>
+<text x="1035" y="533" fill="#3fb980" font-size="8" font-family="monospace" font-weight="700" text-anchor="middle">VIEW</text>
+<line x1="820" y1="548" x2="1060" y2="548" stroke="#30363d" stroke-width="1"/>
+<rect x="821" y="548" width="238" height="26" fill="#1a1f2e"/>
+<text x="830" y="565" fill="#cdd9e5" font-size="11.5" font-family="system-ui, monospace, sans-serif" font-weight="400">messageId</text>
+<text x="1050" y="565" fill="#6e7681" font-size="10" font-family="monospace" text-anchor="end">String</text>
+<rect x="821" y="574" width="238" height="26" fill="#1e2433"/>
+<line x1="821" y1="574" x2="1059" y2="574" stroke="#30363d" stroke-width="0.5" opacity="0.5"/>
+<text x="830" y="591" fill="#cdd9e5" font-size="11.5" font-family="system-ui, monospace, sans-serif" font-weight="400">chatId</text>
+<text x="1050" y="591" fill="#6e7681" font-size="10" font-family="monospace" text-anchor="end">String</text>
+<rect x="821" y="600" width="238" height="26" fill="#1a1f2e"/>
+<line x1="821" y1="600" x2="1059" y2="600" stroke="#30363d" stroke-width="0.5" opacity="0.5"/>
+<text x="830" y="617" fill="#cdd9e5" font-size="11.5" font-family="system-ui, monospace, sans-serif" font-weight="400">senderId</text>
+<text x="1050" y="617" fill="#6e7681" font-size="10" font-family="monospace" text-anchor="end">String</text>
+<rect x="821" y="626" width="238" height="26" fill="#1e2433"/>
+<line x1="821" y1="626" x2="1059" y2="626" stroke="#30363d" stroke-width="0.5" opacity="0.5"/>
+<text x="830" y="643" fill="#cdd9e5" font-size="11.5" font-family="system-ui, monospace, sans-serif" font-weight="400">content</text>
+<text x="1050" y="643" fill="#6e7681" font-size="10" font-family="monospace" text-anchor="end">String</text>
+<rect x="821" y="652" width="238" height="26" fill="#1a1f2e" clip-path="url(#clastmsg)"/>
+<line x1="821" y1="652" x2="1059" y2="652" stroke="#30363d" stroke-width="0.5" opacity="0.5"/>
+<text x="830" y="669" fill="#cdd9e5" font-size="11.5" font-family="system-ui, monospace, sans-serif" font-weight="400">timestamp</text>
+<text x="1050" y="669" fill="#6e7681" font-size="10" font-family="monospace" text-anchor="end">Long</text>
+<rect x="820" y="510" width="240" height="168" rx="8" fill="none" stroke="#1a5e3c" stroke-width="1"/>
+<rect x="20" y="754" width="22" height="14" rx="3" fill="#5a4200"/>
+<text x="31" y="765" fill="#e3b341" font-size="8" font-family="monospace" font-weight="700" text-anchor="middle">PK</text>
+<rect x="48" y="754" width="22" height="14" rx="3" fill="#0d3a6a"/>
+<text x="59" y="765" fill="#79c0ff" font-size="8" font-family="monospace" font-weight="700" text-anchor="middle">FK</text>
+<rect x="76" y="754" width="38" height="14" rx="3" fill="#3a2a00"/>
+<text x="95" y="765" fill="#e3b341" font-size="8" font-family="monospace" font-weight="700" text-anchor="middle">PK·FK</text>
+<text x="124" y="765" fill="#6e7681" font-size="10" font-family="system-ui, sans-serif">solid = FK relation · dashed = DB view</text>
+</svg>

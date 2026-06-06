@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KrossChat · Database Schema</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0d1117;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 36px 16px 48px;
+  font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+  color: #e6edf3;
+}
+h1  { font-size: 20px; font-weight: 600; margin-bottom: 6px; }
+.sub { font-size: 13px; color: #6e7681; margin-bottom: 28px; }
+#wrap { overflow-x: auto; max-width: 100%; }
+svg {
+  display: block; border-radius: 10px;
+  background: #161b22; border: 1px solid #30363d;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+.legend {
+  display: flex; gap: 20px; flex-wrap: wrap;
+  justify-content: center; margin-top: 20px;
+  font-size: 12px; color: #8b949e;
+}
+.li  { display: flex; align-items: center; gap: 7px; }
+.bdg { font-size: 8px; font-family: monospace; font-weight: 700;
+       padding: 2px 5px; border-radius: 3px; white-space: nowrap; }
+.ls  { width: 28px; height: 2px; background: #4a5568; }
+.ld  { width: 28px; height: 2px;
+       background: repeating-linear-gradient(90deg,#28a566 0 4px,transparent 4px 8px); }
+</style>
+</head>
+<body>
+<h1>KrossChat — Database Schema</h1>
+<p class="sub">feature:chat:database · Room · KMP (Android + iOS)</p>
+<div id="wrap"><svg id="g" xmlns="http://www.w3.org/2000/svg"></svg></div>
+<div class="legend">
+  <div class="li"><span class="bdg" style="background:#5a4200;color:#e3b341">PK</span>Primary Key</div>
+  <div class="li"><span class="bdg" style="background:#0d3a6a;color:#79c0ff">FK</span>Foreign Key</div>
+  <div class="li"><span class="bdg" style="background:#3a2a00;color:#e3b341">PK·FK</span>Both</div>
+  <div class="li"><div class="ls"></div>FK Relationship</div>
+  <div class="li"><div class="ld"></div>Database View</div>
+</div>
+<script>
+// ─── constants ───────────────────────────────────────────────────────────────
+const TW = 240, RH = 26, HH = 38, P = 10;
+
+// ─── schema ──────────────────────────────────────────────────────────────────
+const TABLES = [
+  { id:'chat',        name:'ChatEntity',                isView:false, x:60,  y:80,
+    cols:[
+      {n:'chatId',                    t:'String',  pk:true},
+      {n:'lastActivityAt',            t:'Long'},
+    ]},
+  { id:'participant', name:'ChatParticipantEntity',     isView:false, x:820, y:80,
+    cols:[
+      {n:'userId',                    t:'String',  pk:true},
+      {n:'username',                  t:'String'},
+      {n:'profilePictureUrl',         t:'String?'},
+    ]},
+  { id:'crossref',    name:'ChatParticipantCrossRef',   isView:false, x:440, y:310,
+    cols:[
+      {n:'chatId',                    t:'String',  pk:true, fk:true},
+      {n:'userId',                    t:'String',  pk:true, fk:true},
+      {n:'isActive',                  t:'Boolean'},
+    ]},
+  { id:'message',     name:'ChatMessageEntity',         isView:false, x:60,  y:510,
+    cols:[
+      {n:'messageId',                 t:'String',  pk:true},
+      {n:'chatId',                    t:'String',  fk:true},
+      {n:'senderId',                  t:'String',  fk:true},
+      {n:'content',                   t:'String'},
+      {n:'timestamp',                 t:'Long'},
+      {n:'deliveryStatus',            t:'String'},
+      {n:'deliveryStatusTimestamp',   t:'Long'},
+    ]},
+  { id:'lastmsg',     name:'last_message_view_per_chat', isView:true, x:820, y:510,
+    cols:[
+      {n:'messageId',  t:'String'},
+      {n:'chatId',     t:'String'},
+      {n:'senderId',   t:'String'},
+      {n:'content',    t:'String'},
+      {n:'timestamp',  t:'Long'},
+    ]},
+];
+
+// [fromId, fromEdge, toId, toEdge, fromCard, toCard, isView]
+const RELS = [
+  ['chat',        'right',  'crossref', 'left',   '1', 'N',    false],
+  ['participant', 'left',   'crossref', 'right',  '1', 'N',    false],
+  ['chat',        'bottom', 'message',  'top',    '1', 'N',    false],
+  ['participant', 'bottom', 'message',  'right',  '1', 'N',    false],
+  ['chat',        'right',  'lastmsg',  'left',   '1', '0..1', true ],
+];
+
+// ─── helpers ─────────────────────────────────────────────────────────────────
+const NS  = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('g');
+const tH  = t => HH + t.cols.length * RH;
+const tbl = id => TABLES.find(t => t.id === id);
+
+function ep(t, edge) {
+  const h = tH(t);
+  if (edge === 'top')    return [t.x + TW / 2, t.y];
+  if (edge === 'bottom') return [t.x + TW / 2, t.y + h];
+  if (edge === 'left')   return [t.x,           t.y + h / 2];
+  if (edge === 'right')  return [t.x + TW,      t.y + h / 2];
+}
+
+function mk(tag, attrs) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs))
+    if (v != null) e.setAttribute(k, v);
+  return e;
+}
+function ap(parent, ...kids) { kids.forEach(k => parent.appendChild(k)); return parent; }
+function tx(el, s)           { el.textContent = s; return el; }
+function lbl(x, y, s, color, anchor = 'middle') {
+  return tx(mk('text', { x, y, fill: color,
+    'font-size': '11', 'font-family': 'monospace',
+    'font-weight': '700', 'text-anchor': anchor }), s);
+}
+
+// ─── canvas size ─────────────────────────────────────────────────────────────
+const W = Math.max(...TABLES.map(t => t.x + TW)) + 80;
+const H = Math.max(...TABLES.map(t => t.y + tH(t))) + 60;
+svg.setAttribute('width',   W);
+svg.setAttribute('height',  H);
+svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+// ─── defs: arrowhead markers ──────────────────────────────────────────────────
+const defs = ap(svg, mk('defs', {}));
+function mkArrow(id, color) {
+  return ap(
+    mk('marker', { id, markerWidth:'8', markerHeight:'8', refX:'7', refY:'3', orient:'auto' }),
+    mk('path',   { d: 'M0,0 L0,6 L8,3 z', fill: color })
+  );
+}
+ap(defs, mkArrow('aFk', '#4a5568'), mkArrow('aVw', '#28a566'));
+
+// ─── background ──────────────────────────────────────────────────────────────
+ap(svg, mk('rect', { x:0, y:0, width:W, height:H, fill:'#161b22' }));
+
+// ─── relationships (drawn behind tables) ─────────────────────────────────────
+for (const [fid, fe, tid, te, fc, tc, isView] of RELS) {
+  const ft = tbl(fid), tt = tbl(tid);
+  const [fx, fy] = ep(ft, fe);
+  const [tx2, ty] = ep(tt, te);
+
+  const color  = isView ? '#28a566' : '#4a5568';
+  const marker = isView ? 'url(#aVw)' : 'url(#aFk)';
+  const dash   = isView ? '6,3' : 'none';
+
+  let d;
+  if (fe === 'right' && te === 'left') {
+    if (isView) {
+      // chat → lastmsg: route via x=760 to stay clear of crossref
+      d = `M${fx},${fy} L760,${fy} L760,${ty} L${tx2},${ty}`;
+    } else {
+      // chat → crossref: simple elbow
+      const mx = (fx + tx2) / 2;
+      d = `M${fx},${fy} L${mx},${fy} L${mx},${ty} L${tx2},${ty}`;
+    }
+  } else if (fe === 'left' && te === 'right') {
+    // participant → crossref: go left then elbow
+    const mx = (fx + tx2) / 2;
+    d = `M${fx},${fy} L${mx},${fy} L${mx},${ty} L${tx2},${ty}`;
+  } else if (fe === 'bottom' && te === 'top') {
+    // chat → message: straight vertical
+    d = `M${fx},${fy} L${tx2},${ty}`;
+  } else if (fe === 'bottom' && te === 'right') {
+    // participant → message: go down then route left above message, then in
+    d = `M${fx},${fy} L${fx},460 L${tx2 + 12},460 L${tx2 + 12},${ty} L${tx2},${ty}`;
+  } else {
+    d = `M${fx},${fy} L${tx2},${ty}`;
+  }
+
+  ap(svg, mk('path', { d, stroke: color, 'stroke-width': '1.5',
+    fill: 'none', 'stroke-dasharray': dash, 'marker-end': marker }));
+
+  // cardinality labels
+  const off = { top:[0,-8], bottom:[0,14], left:[-12,4], right:[12,4] };
+  const [fox, foy] = off[fe];
+  const [tox, toy] = off[te];
+  ap(svg, lbl(fx + fox, fy + foy, fc,  color));
+  ap(svg, lbl(tx2 + tox, ty + toy, tc, color));
+}
+
+// ─── tables ──────────────────────────────────────────────────────────────────
+let ci = 0;
+for (const t of TABLES) {
+  const h   = tH(t);
+  const g   = ap(svg, mk('g', {}));
+  const cid = `c${ci++}`;
+
+  // clip path (rounded corners)
+  ap(g,
+    ap(mk('defs', {}),
+      ap(mk('clipPath', { id: cid }),
+        mk('rect', { x: t.x, y: t.y, width: TW, height: h, rx: '8' })
+      )
+    )
+  );
+
+  // drop shadow
+  ap(g, mk('rect', { x: t.x+3, y: t.y+4, width: TW, height: h,
+    rx: '8', fill: 'rgba(0,0,0,0.45)' }));
+
+  // body
+  ap(g, mk('rect', { x: t.x, y: t.y, width: TW, height: h,
+    rx: '8', fill: '#1a1f2e', stroke: '#30363d', 'stroke-width': '1' }));
+
+  // header
+  ap(g, mk('rect', { x: t.x, y: t.y, width: TW, height: HH,
+    fill: t.isView ? '#0d2e1e' : '#0d2644',
+    'clip-path': `url(#${cid})` }));
+
+  // table name
+  ap(g, tx(mk('text', { x: t.x + TW/2, y: t.y + HH/2 + 5,
+    fill: '#e6edf3', 'font-size': '13',
+    'font-family': "'Segoe UI',system-ui,sans-serif",
+    'font-weight': '600', 'text-anchor': 'middle' }), t.name));
+
+  // VIEW badge
+  if (t.isView) {
+    const bx = t.x + TW - 42, by = t.y + (HH - 14) / 2;
+    ap(g,
+      mk('rect', { x: bx, y: by, width: 34, height: 14, rx: '3', fill: '#0f4a35' }),
+      tx(mk('text', { x: bx + 17, y: by + 10.5, fill: '#3fb980', 'font-size': '8',
+        'font-family': 'monospace', 'font-weight': '700', 'text-anchor': 'middle' }), 'VIEW')
+    );
+  }
+
+  // header divider
+  ap(g, mk('line', { x1: t.x, y1: t.y+HH, x2: t.x+TW, y2: t.y+HH,
+    stroke: '#30363d', 'stroke-width': '1' }));
+
+  // columns
+  t.cols.forEach((col, i) => {
+    const ry = t.y + HH + i * RH;
+    const rowFill = col.pk ? '#211d00'
+                 : col.fk ? '#001428'
+                 : (i % 2 === 0 ? '#1a1f2e' : '#1e2433');
+
+    const rr = mk('rect', { x: t.x+1, y: ry, width: TW-2, height: RH, fill: rowFill });
+    if (i === t.cols.length - 1) rr.setAttribute('clip-path', `url(#${cid})`);
+    ap(g, rr);
+
+    // row separator
+    if (i > 0)
+      ap(g, mk('line', { x1: t.x+1, y1: ry, x2: t.x+TW-1, y2: ry,
+        stroke: '#30363d', 'stroke-width': '0.5', opacity: '0.5' }));
+
+    // key badge
+    let badge = null, bbg = null, bfg = null, bw = 22;
+    if (col.pk && col.fk) { badge = 'PK·FK'; bbg = '#3a2a00'; bfg = '#e3b341'; bw = 38; }
+    else if (col.pk)      { badge = 'PK';    bbg = '#5a4200'; bfg = '#e3b341'; }
+    else if (col.fk)      { badge = 'FK';    bbg = '#0d3a6a'; bfg = '#79c0ff'; }
+
+    let ox = 0;
+    if (badge) {
+      const bx2 = t.x + P, by2 = ry + (RH - 14) / 2;
+      ap(g,
+        mk('rect', { x: bx2, y: by2, width: bw, height: 14, rx: '3', fill: bbg }),
+        tx(mk('text', { x: bx2 + bw/2, y: by2 + 10, fill: bfg, 'font-size': '8',
+          'font-family': 'monospace', 'font-weight': '700', 'text-anchor': 'middle' }), badge)
+      );
+      ox = bw + 6;
+    }
+
+    const ty3 = ry + RH / 2 + 4;
+    const nf  = col.pk ? '#e3b341' : col.fk ? '#58a6ff' : '#cdd9e5';
+
+    // column name
+    ap(g, tx(mk('text', { x: t.x + P + ox, y: ty3, fill: nf, 'font-size': '11.5',
+      'font-family': "'Segoe UI',monospace,sans-serif",
+      'font-weight': col.pk ? '600' : '400' }), col.n));
+
+    // column type (right-aligned)
+    ap(g, tx(mk('text', { x: t.x + TW - P, y: ty3, fill: '#6e7681',
+      'font-size': '10', 'font-family': 'monospace', 'text-anchor': 'end' }), col.t));
+  });
+
+  // outer border overlay
+  ap(g, mk('rect', { x: t.x, y: t.y, width: TW, height: h, rx: '8',
+    fill: 'none',
+    stroke: t.isView ? '#1a5e3c' : '#3d4e63', 'stroke-width': '1' }));
+}
+</script>
+</body>
+</html>

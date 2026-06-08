@@ -1,5 +1,6 @@
 package com.taoufikcode.chat.database
 
+import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.taoufikcode.chat.database.dao.ChatDao
@@ -24,6 +25,7 @@ import com.taoufikcode.chat.database.view.LastMessageView
     ],
     version = 1,
 )
+@ConstructedBy(KrossChatDatabaseConstructor::class)
 abstract class KrossChatDatabase: RoomDatabase() {
     abstract val chatDao: ChatDao
     abstract val chatParticipantDao: ChatParticipantDao

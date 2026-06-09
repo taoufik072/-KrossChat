@@ -1,8 +1,8 @@
 package com.taoufikcode.chat.data.mappers
 
 import com.taoufikcode.chat.data.dto.ChatParticipantDto
-import com.taoufikcode.chat.database.entities.ChatMessageEntity
-import com.taoufikcode.chat.database.entities.ChatParticipantEntity
+import com.taoufikcode.chat.database.entities.MessageEntity
+import com.taoufikcode.chat.database.entities.ParticipantEntity
 import com.taoufikcode.chat.domain.models.ChatMessage
 import com.taoufikcode.chat.domain.models.ChatMessageDeliveryStatus
 import com.taoufikcode.chat.domain.models.ChatParticipant
@@ -15,7 +15,7 @@ fun ChatParticipantDto.toDomain(): ChatParticipant {
         profilePictureUrl = profilePictureUrl
     )
 }
-fun ChatMessageEntity.toDomain(): ChatMessage {
+fun MessageEntity.toDomain(): ChatMessage {
     return ChatMessage(
         id = chatId,
         chatId = chatId,
@@ -26,7 +26,7 @@ fun ChatMessageEntity.toDomain(): ChatMessage {
     )
 }
 
-fun ChatParticipantEntity.toDomain(): ChatParticipant {
+fun ParticipantEntity.toDomain(): ChatParticipant {
     return ChatParticipant(
         userId = userId,
         username = username,
@@ -34,8 +34,8 @@ fun ChatParticipantEntity.toDomain(): ChatParticipant {
     )
 }
 
-fun ChatParticipant.toEntity(): ChatParticipantEntity {
-    return ChatParticipantEntity(
+fun ChatParticipant.toEntity(): ParticipantEntity {
+    return ParticipantEntity(
         userId = userId,
         username = username,
         profilePictureUrl = profilePictureUrl

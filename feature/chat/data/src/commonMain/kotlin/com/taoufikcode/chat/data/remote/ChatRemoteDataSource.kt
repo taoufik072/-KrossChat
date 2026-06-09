@@ -4,10 +4,13 @@ package com.taoufikcode.chat.data.remote
 import com.taoufikcode.chat.data.dto.ChatDto
 import com.taoufikcode.chat.data.dto.ChatParticipantDto
 import com.taoufikcode.chat.data.dto.CreateChatDto
+import com.taoufikcode.core.data.network.delete
 import com.taoufikcode.core.data.network.get
 import com.taoufikcode.core.data.network.post
 import com.taoufikcode.core.domain.util.DataError
+import com.taoufikcode.core.domain.util.EmptyResult
 import com.taoufikcode.core.domain.util.Result
+import com.taoufikcode.core.domain.util.asEmptyResult
 import io.ktor.client.HttpClient
 
 class ChatRemoteDataSource(
@@ -40,5 +43,10 @@ class ChatRemoteDataSource(
         return httpClient.get<ChatDto>(
             route = "/chat/$chatId"
         )
+    }
+     suspend fun leaveChat(chatId: String): EmptyResult<DataError.Remote> {
+        return httpClient.delete<Unit>(
+            route = "/chat/$chatId/leave"
+        ).asEmptyResult()
     }
 }

@@ -1,7 +1,7 @@
 package com.taoufikcode.chat.data.mappers
 
 import com.taoufikcode.chat.data.dto.ChatMessageDto
-import com.taoufikcode.chat.database.entities.ChatMessageEntity
+import com.taoufikcode.chat.database.entities.MessageEntity
 import com.taoufikcode.chat.database.view.LastMessageView
 import com.taoufikcode.chat.domain.models.ChatMessage
 import com.taoufikcode.chat.domain.models.ChatMessageDeliveryStatus
@@ -29,8 +29,8 @@ fun LastMessageView.toDomain(): ChatMessage {
     )
 }
 
-fun ChatMessage.toEntity(): ChatMessageEntity {
-    return ChatMessageEntity(
+fun ChatMessage.toEntity(): MessageEntity {
+    return MessageEntity(
         messageId = id,
         chatId = chatId,
         senderId = senderId,

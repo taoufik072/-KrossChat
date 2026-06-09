@@ -1,59 +1,117 @@
 #!/usr/bin/env python3
 """Generate schema.svg — run once, then commit the output."""
 
-TW, RH, HH, P = 240, 26, 38, 10
+TW, RH, HH, P = 300, 24, 38, 10
+DRH = 20   # DAO method row height
+DAH = 26   # DAO section divider height
 
 TABLES = [
-    {'id': 'chat',        'name': 'ChatEntity',                'is_view': False, 'x': 60,  'y': 80,
-     'cols': [
-         {'n': 'chatId',                   't': 'String',  'pk': True,  'fk': False},
-         {'n': 'lastActivityAt',           't': 'Long',    'pk': False, 'fk': False},
-     ]},
-    {'id': 'participant', 'name': 'ChatParticipantEntity',     'is_view': False, 'x': 820, 'y': 80,
-     'cols': [
-         {'n': 'userId',                   't': 'String',  'pk': True,  'fk': False},
-         {'n': 'username',                 't': 'String',  'pk': False, 'fk': False},
-         {'n': 'profilePictureUrl',        't': 'String?', 'pk': False, 'fk': False},
-     ]},
-    {'id': 'crossref',    'name': 'ChatParticipantCrossRef',   'is_view': False, 'x': 440, 'y': 310,
-     'cols': [
-         {'n': 'chatId',                   't': 'String',  'pk': True,  'fk': True},
-         {'n': 'userId',                   't': 'String',  'pk': True,  'fk': True},
-         {'n': 'isActive',                 't': 'Boolean', 'pk': False, 'fk': False},
-     ]},
-    {'id': 'message',     'name': 'ChatMessageEntity',         'is_view': False, 'x': 60,  'y': 510,
-     'cols': [
-         {'n': 'messageId',                't': 'String',  'pk': True,  'fk': False},
-         {'n': 'chatId',                   't': 'String',  'pk': False, 'fk': True},
-         {'n': 'senderId',                 't': 'String',  'pk': False, 'fk': True},
-         {'n': 'content',                  't': 'String',  'pk': False, 'fk': False},
-         {'n': 'timestamp',                't': 'Long',    'pk': False, 'fk': False},
-         {'n': 'deliveryStatus',           't': 'String',  'pk': False, 'fk': False},
-         {'n': 'deliveryStatusTimestamp',  't': 'Long',    'pk': False, 'fk': False},
-     ]},
-    {'id': 'lastmsg',     'name': 'last_message_view_per_chat','is_view': True,  'x': 820, 'y': 510,
-     'cols': [
-         {'n': 'messageId',  't': 'String', 'pk': False, 'fk': False},
-         {'n': 'chatId',     't': 'String', 'pk': False, 'fk': False},
-         {'n': 'senderId',   't': 'String', 'pk': False, 'fk': False},
-         {'n': 'content',    't': 'String', 'pk': False, 'fk': False},
-         {'n': 'timestamp',  't': 'Long',   'pk': False, 'fk': False},
-     ]},
+    {
+        'id': 'chat', 'name': 'ChatEntity', 'is_view': False, 'x': 60, 'y': 80,
+        'cols': [
+            {'n': 'chatId',         't': 'String', 'pk': True,  'fk': False},
+            {'n': 'lastActivityAt', 't': 'Long',   'pk': False, 'fk': False},
+        ],
+        'dao': 'ChatDao',
+        'dao_methods': [
+            'upsertChat(chat)',
+            'upsertChats(chats)',
+            'deleteChatById(chatId)',
+            'deleteAllChats()',
+            'deleteChatsByIds(ids)',
+            'getAllChatIds()',
+            'getChatCount()',
+            'getChatById(chatId)',
+            'getChatsWithParticipants()',
+            'getActiveParticipants(chatId)',
+            'getChatInfoById(chatId)',
+            'upsertChatWithParticipants()',
+            'upsertChatsWithParticipants()',
+        ],
+    },
+    {
+        'id': 'participant', 'name': 'ParticipantEntity', 'is_view': False, 'x': 780, 'y': 80,
+        'cols': [
+            {'n': 'userId',            't': 'String',  'pk': True,  'fk': False},
+            {'n': 'username',          't': 'String',  'pk': False, 'fk': False},
+            {'n': 'profilePictureUrl', 't': 'String?', 'pk': False, 'fk': False},
+        ],
+        'dao': 'ParticipantDao',
+        'dao_methods': [
+            'upsertParticipant(participant)',
+            'upsertParticipants(participants)',
+            'getAllParticipants()',
+        ],
+    },
+    {
+        'id': 'join', 'name': 'ChatParticipantJoin', 'is_view': False, 'x': 420, 'y': 80,
+        'cols': [
+            {'n': 'chatId',   't': 'String',  'pk': True,  'fk': True},
+            {'n': 'userId',   't': 'String',  'pk': True,  'fk': True},
+            {'n': 'isActive', 't': 'Boolean', 'pk': False, 'fk': False},
+        ],
+        'dao': 'ChatParticipantsJoinDao',
+        'dao_methods': [
+            'upsertCrossRefs(crossRefs)',
+            'getActiveParticipantIdsByChat(chatId)',
+            'getAllParticipantIdsByChat(chatId)',
+            'markParticipantsAsInactive(chatId, ids)',
+            'reactivateParticipants(chatId, ids)',
+            'syncChatParticipants(chatId, participants)',
+        ],
+    },
+    {
+        'id': 'message', 'name': 'MessageEntity', 'is_view': False, 'x': 60, 'y': 520,
+        'cols': [
+            {'n': 'messageId',               't': 'String', 'pk': True,  'fk': False},
+            {'n': 'chatId',                  't': 'String', 'pk': False, 'fk': True},
+            {'n': 'senderId',                't': 'String', 'pk': False, 'fk': True},
+            {'n': 'content',                 't': 'String', 'pk': False, 'fk': False},
+            {'n': 'timestamp',               't': 'Long',   'pk': False, 'fk': False},
+            {'n': 'deliveryStatus',          't': 'String', 'pk': False, 'fk': False},
+            {'n': 'deliveryStatusTimestamp', 't': 'Long',   'pk': False, 'fk': False},
+        ],
+        'dao': 'MessageDao',
+        'dao_methods': [
+            'upsertMessage(message)',
+            'upsertMessages(messages)',
+            'deleteMessageById(messageId)',
+            'deleteMessageById(messageIds)',
+            'getMessagesByChatId(chatId)',
+            'getMessageById(messageId)',
+        ],
+    },
+    {
+        'id': 'lastmsg', 'name': 'last_message_view_per_chat', 'is_view': True, 'x': 780, 'y': 330,
+        'cols': [
+            {'n': 'messageId',      't': 'String', 'pk': False, 'fk': False},
+            {'n': 'chatId',         't': 'String', 'pk': False, 'fk': False},
+            {'n': 'senderId',       't': 'String', 'pk': False, 'fk': False},
+            {'n': 'content',        't': 'String', 'pk': False, 'fk': False},
+            {'n': 'timestamp',      't': 'Long',   'pk': False, 'fk': False},
+            {'n': 'deliveryStatus', 't': 'String', 'pk': False, 'fk': False},
+        ],
+        'dao': None,
+        'dao_methods': [],
+    },
 ]
 
-# (fromId, fromEdge, toId, toEdge, fromCard, toCard, isView)
+# (fromId, fromEdge, toId, toEdge, fromCard, toCard, isView, customPath, fromLabel, toLabel)
 RELS = [
-    ('chat',        'right',  'crossref', 'left',   '1', 'N',    False),
-    ('participant', 'left',   'crossref', 'right',  '1', 'N',    False),
-    ('chat',        'bottom', 'message',  'top',    '1', 'N',    False),
-    ('participant', 'bottom', 'message',  'right',  '1', 'N',    False),
-    ('chat',        'right',  'lastmsg',  'left',   '1', '0..1', True),
+    ('chat',        'right',  'join',    'left',  '1', 'N',    False, None,                                                                           None,       None),
+    ('participant', 'left',   'join',    'right', '1', 'N',    False, None,                                                                           None,       None),
+    ('chat',        'bottom', 'message', 'top',   '1', 'N',    False, None,                                                                           None,       None),
+    ('participant', 'bottom', 'message', 'right', '1', 'N',    False, 'M930,276 L930,308 L760,308 L760,500 L400,500 L400,696 L360,696',               (930, 290), (372, 700)),
+    ('chat',        'right',  'lastmsg', 'left',  '1', '0..1', True,  'M360,266 L390,266 L390,380 L760,380 L760,421 L780,421',                        (372, 258), (768, 425)),
 ]
 
-# ── helpers ──────────────────────────────────────────────────────────────────
+# ── helpers ───────────────────────────────────────────────────────────────────
 
 def th(t):
-    return HH + len(t['cols']) * RH
+    col_h = HH + len(t['cols']) * RH
+    if t.get('dao_methods'):
+        return col_h + DAH + len(t['dao_methods']) * DRH
+    return col_h
 
 def ep(t, edge):
     h = th(t)
@@ -90,7 +148,9 @@ e(f'<rect width="{W}" height="{H}" fill="#161b22"/>')
 
 # ── relationships ─────────────────────────────────────────────────────────────
 
-for fid, fe, tid, te, fc, tc, is_view in RELS:
+off = {'top': (0, -8), 'bottom': (0, 14), 'left': (-12, 4), 'right': (12, 4)}
+
+for fid, fe, tid, te, fc, tc, is_view, custom_path, fl, tl in RELS:
     ft, tt = by_id(fid), by_id(tid)
     fx, fy = ep(ft, fe)
     tx, ty = ep(tt, te)
@@ -98,36 +158,39 @@ for fid, fe, tid, te, fc, tc, is_view in RELS:
     marker = 'aVw'     if is_view else 'aFk'
     dash   = ' stroke-dasharray="6,3"' if is_view else ''
 
-    if fe == 'right' and te == 'left':
-        if is_view:
-            d = f'M{fx},{fy} L760,{fy} L760,{ty} L{tx},{ty}'
-        else:
+    if custom_path:
+        d = custom_path
+        flx, fly = fl
+        tlx, tly = tl
+    else:
+        if fe == 'right' and te == 'left':
             mx = (fx + tx) // 2
             d = f'M{fx},{fy} L{mx},{fy} L{mx},{ty} L{tx},{ty}'
-    elif fe == 'left' and te == 'right':
-        mx = (fx + tx) // 2
-        d = f'M{fx},{fy} L{mx},{fy} L{mx},{ty} L{tx},{ty}'
-    elif fe == 'bottom' and te == 'top':
-        d = f'M{fx},{fy} L{tx},{ty}'
-    elif fe == 'bottom' and te == 'right':
-        d = f'M{fx},{fy} L{fx},460 L{tx+12},460 L{tx+12},{ty} L{tx},{ty}'
-    else:
-        d = f'M{fx},{fy} L{tx},{ty}'
+        elif fe == 'left' and te == 'right':
+            mx = (fx + tx) // 2
+            d = f'M{fx},{fy} L{mx},{fy} L{mx},{ty} L{tx},{ty}'
+        elif fe == 'bottom' and te == 'top':
+            d = f'M{fx},{fy} L{tx},{ty}'
+        else:
+            d = f'M{fx},{fy} L{tx},{ty}'
+        fox, foy = off[fe]
+        tox, toy = off[te]
+        flx, fly = fx + fox, fy + foy
+        tlx, tly = tx + tox, ty + toy
 
     e(f'<path d="{d}" stroke="{col}" stroke-width="1.5" fill="none"'
       f'{dash} marker-end="url(#{marker})"/>')
 
-    off = {'top':(0,-8),'bottom':(0,14),'left':(-12,4),'right':(12,4)}
-    fox, foy = off[fe]; tox, toy = off[te]
-    for x, y, card in [(fx+fox, fy+foy, fc), (tx+tox, ty+toy, tc)]:
+    for x, y, card in [(flx, fly, fc), (tlx, tly, tc)]:
         e(f'<text x="{x}" y="{y}" fill="{col}" font-size="11" font-family="monospace"'
           f' font-weight="700" text-anchor="middle">{card}</text>')
 
 # ── tables ────────────────────────────────────────────────────────────────────
 
 for t in TABLES:
-    h   = th(t)
-    cid = f'c{t["id"]}'
+    h             = th(t)
+    cid           = f'c{t["id"]}'
+    col_section_h = HH + len(t['cols']) * RH
 
     # shadow
     e(f'<rect x="{t["x"]+3}" y="{t["y"]+4}" width="{TW}" height="{h}"'
@@ -154,25 +217,27 @@ for t in TABLES:
       f' stroke="#30363d" stroke-width="1"/>')
 
     # columns
+    has_dao = bool(t.get('dao_methods'))
     for i, col in enumerate(t['cols']):
         ry = t['y'] + HH + i * RH
-        if col['pk'] or (col['pk'] and col['fk']):
+        if col['pk']:
             rf = '#211d00'
         elif col['fk']:
             rf = '#001428'
         else:
             rf = '#1a1f2e' if i % 2 == 0 else '#1e2433'
 
-        clip = f' clip-path="url(#{cid})"' if i == len(t['cols']) - 1 else ''
+        is_last_col = (i == len(t['cols']) - 1) and not has_dao
+        clip = f' clip-path="url(#{cid})"' if is_last_col else ''
         e(f'<rect x="{t["x"]+1}" y="{ry}" width="{TW-2}" height="{RH}" fill="{rf}"{clip}/>')
         if i > 0:
             e(f'<line x1="{t["x"]+1}" y1="{ry}" x2="{t["x"]+TW-1}" y2="{ry}"'
               f' stroke="#30363d" stroke-width="0.5" opacity="0.5"/>')
 
         badge = bbg = bfg = None; bw = 22
-        if col['pk'] and col['fk']:   badge, bbg, bfg, bw = 'PK·FK','#3a2a00','#e3b341', 38
-        elif col['pk']:               badge, bbg, bfg      = 'PK',   '#5a4200','#e3b341'
-        elif col['fk']:               badge, bbg, bfg      = 'FK',   '#0d3a6a','#79c0ff'
+        if col['pk'] and col['fk']:   badge, bbg, bfg, bw = 'PK·FK', '#3a2a00', '#e3b341', 38
+        elif col['pk']:               badge, bbg, bfg      = 'PK',    '#5a4200', '#e3b341'
+        elif col['fk']:               badge, bbg, bfg      = 'FK',    '#0d3a6a', '#79c0ff'
 
         ox = 0
         if badge:
@@ -190,6 +255,31 @@ for t in TABLES:
         e(f'<text x="{t["x"]+TW-P}" y="{ty3}" fill="#6e7681" font-size="10"'
           f' font-family="monospace" text-anchor="end">{col["t"]}</text>')
 
+    # DAO section
+    if has_dao:
+        dao_y = t['y'] + col_section_h
+        # divider bg
+        e(f'<rect x="{t["x"]+1}" y="{dao_y}" width="{TW-2}" height="{DAH}"'
+          f' fill="#0a1a1a"/>')
+        e(f'<line x1="{t["x"]}" y1="{dao_y}" x2="{t["x"]+TW}" y2="{dao_y}"'
+          f' stroke="#1e4040" stroke-width="1"/>')
+        # DAO label
+        e(f'<text x="{t["x"]+P}" y="{dao_y+DAH//2+4}" fill="#3fb980" font-size="9.5"'
+          f' font-family="monospace" font-weight="700">DAO: {t["dao"]}</text>')
+        # method rows
+        for j, method in enumerate(t['dao_methods']):
+            my  = dao_y + DAH + j * DRH
+            mrf = '#111820' if j % 2 == 0 else '#131c28'
+            is_last_row = (j == len(t['dao_methods']) - 1)
+            clip = f' clip-path="url(#{cid})"' if is_last_row else ''
+            e(f'<rect x="{t["x"]+1}" y="{my}" width="{TW-2}" height="{DRH}" fill="{mrf}"{clip}/>')
+            if j > 0:
+                e(f'<line x1="{t["x"]+1}" y1="{my}" x2="{t["x"]+TW-1}" y2="{my}"'
+                  f' stroke="#1e2433" stroke-width="0.4" opacity="0.4"/>')
+            mty = my + DRH // 2 + 4
+            e(f'<text x="{t["x"]+P}" y="{mty}" fill="#8b949e" font-size="9.5"'
+              f' font-family="monospace">{method}</text>')
+
     # outer border
     bc = '#1a5e3c' if t['is_view'] else '#3d4e63'
     e(f'<rect x="{t["x"]}" y="{t["y"]}" width="{TW}" height="{h}"'
@@ -198,7 +288,7 @@ for t in TABLES:
 # ── legend ────────────────────────────────────────────────────────────────────
 
 lx, ly = 20, H - 26
-items = [('PK','#5a4200','#e3b341',22), ('FK','#0d3a6a','#79c0ff',22), ('PK·FK','#3a2a00','#e3b341',38)]
+items = [('PK', '#5a4200', '#e3b341', 22), ('FK', '#0d3a6a', '#79c0ff', 22), ('PK·FK', '#3a2a00', '#e3b341', 38)]
 cx = lx
 for label, bbg, bfg, bw in items:
     e(f'<rect x="{cx}" y="{ly-10}" width="{bw}" height="14" rx="3" fill="{bbg}"/>')
@@ -216,4 +306,4 @@ import os
 out_path = os.path.join(os.path.dirname(__file__), 'schema.svg')
 with open(out_path, 'w', encoding='utf-8') as f:
     f.write('\n'.join(out))
-print(f'Written: {out_path}')
+print(f'Written: {out_path}  ({W}×{H})')

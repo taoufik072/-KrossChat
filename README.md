@@ -1,50 +1,45 @@
 # KrossChat
 
-> **🚧 Work in progress** — Authentication flow is complete; real-time chat feature is currently
-> being implemented.
-
-KrossChat is a **Kotlin Multiplatform** real-time messaging application targeting **Android**, **iOS**, and **Desktop (JVM)**. The entire UI is built with **Compose Multiplatform**, meaning one codebase powers all three platforms.
+KrossChat is a **Kotlin Multiplatform** real-time messaging application targeting **Android** and **iOS**. The entire UI is built with **Compose Multiplatform**, meaning one codebase powers both platforms.
 
 ---
 
-## What the app does
+## Features
 
-| Feature                | Status         | Description                                                             |
-|------------------------|----------------|-------------------------------------------------------------------------|
-| **Registration**       | ✅ Done         | Email + password sign-up with client-side validation and error feedback |
-| **Login**              | ✅ Done         | Email + password sign-in with session token storage via DataStore       |
-| **Email verification** | ✅ Done         | Post-registration verification screen with deep-link handling           |
-| **Forgot password**    | ✅ Done         | Password reset request screen with deep-link handling                   |
-| **Reset password**     | ✅ Done         | New password entry screen reached via deep link                         |
-| **Session management** | ✅ Done         | Auth state check on startup, session expiration handling                |
-| **Navigation**         | ✅ Done         | Auth → Chat flow with type-safe routes and deep-link support            |
-| **Chat list**          | 🚧 In progress | Conversation list screen (scaffold and ViewModel wired)                 |
-| **WebSocket chat**     | 🚧 In progress | Real-time messaging via Ktor WebSocket                                  |
-| **Room persistence**   | 🚧 In progress | Offline-first message storage with Room                                 |
+- Registration
+- Login
+- Email verification
+- Forgot password
+- Reset password
+- Session management
+- Navigation
+- Chat list
+- WebSocket chat
+- Room persistence
 
 ---
 
 ## Tech stack
 
-| Concern              | Library / Tool                                  | Version       |
-|----------------------|-------------------------------------------------|---------------|
-| Language             | Kotlin / KMP                                    | 2.2.0         |
-| UI                   | Compose Multiplatform                           | 1.9.0-beta01  |
-| Navigation           | Jetbrains Navigation Compose                    | 2.9.0-beta04  |
-| Networking           | Ktor (OkHttp on Android, Darwin on iOS)         | 3.2.3         |
-| Dependency Injection | Koin                                            | 4.1.0         |
-| Local database       | Room (KMP)                                      | 2.7.2         |
-| Token storage        | DataStore                                       | 1.1.7         |
-| Async                | Kotlinx Coroutines                              | 1.10.2        |
-| Serialization        | Kotlinx Serialization                           | 1.9.0         |
-| Date/time            | Kotlinx Datetime                                | 0.7.1         |
-| Image loading        | Coil 3                                          | 3.3.0         |
-| Permissions          | Moko Permissions                                | 0.19.1        |
-| Logging              | Kermit                                          | 2.1.0         |
-| Push notifications   | Firebase BOM                                    | 34.0.0        |
-| Adaptive layouts     | Material3 Adaptive                              | 1.2.0-alpha04 |
-| Build secrets        | BuildKonfig                                     | 0.17.1        |
-| Build system         | AGP + Gradle convention plugins (`build-logic`) | 8.11.1        |
+| Concern              | Library / Tool                                  | Version    |
+|----------------------|-------------------------------------------------|------------|
+| Language             | Kotlin / KMP                                    | 2.3.20     |
+| UI                   | Compose Multiplatform                           | 1.11.0     |
+| Navigation           | Jetbrains Navigation Compose                    | 2.9.2      |
+| Networking           | Ktor (OkHttp on Android, Darwin on iOS)         | 3.5.0      |
+| Dependency Injection | Koin                                            | 4.1.0      |
+| Local database       | Room (KMP)                                      | 2.8.4      |
+| Token storage        | DataStore                                       | 1.2.1      |
+| Async                | Kotlinx Coroutines                              | 1.11.0     |
+| Serialization        | Kotlinx Serialization                           | 1.11.0     |
+| Date/time            | Kotlinx Datetime                                | 0.8.0      |
+| Image loading        | Coil 3                                          | 3.4.0      |
+| Permissions          | Moko Permissions                                | 0.20.1     |
+| Logging              | Kermit                                          | 2.1.0      |
+| Push notifications   | Firebase BOM                                    | 34.14.0    |
+| Adaptive layouts     | Material3 Adaptive                              | 1.2.0      |
+| Build secrets        | BuildKonfig                                     | 0.17.1     |
+| Build system         | AGP + Gradle convention plugins (`build-logic`) | 8.13.2     |
 
 ---
 
@@ -52,64 +47,42 @@ KrossChat is a **Kotlin Multiplatform** real-time messaging application targetin
 
 ```
 KrossChat/
-├── build-logic/               # Gradle convention plugins
-│   └── convention/            # KmpLibraryPlugin, CmpLibraryPlugin, RoomPlugin, …
+├── build-logic/
+│   └── convention/
 │
 ├── core/
-│   ├── domain/                # Result<T,E>, DataError, AuthService interface, SessionStorage,
-│   │                          #   User, PasswordValidator, KrossChatLogger
-│   ├── data/                  # Ktor HttpClient factory, KtorService, DataStoreSessionStorage,
-│   │                          #   DTOs + mappers, Kermit logging, Koin wiring
-│   ├── presentation/          # DeviceConfiguration, UiText, ObserveAsEvents, clearFocusOnTap,
-│   │                          #   DataError → UiText mapper
-│   └── designsystem/          # Material3 theme, typography, color tokens,
-│                              #   KrossButton, KrossTextField, KrossPasswordTextField,
-│                              #   KrossAdaptiveFormLayout, KrossAdaptiveResultLayout,
-│                              #   KrossSnackBarScaffold, KrossBottomSheet, dialogs,
-│                              #   KrossAvatarPhoto, KrossStackedAvatars, KrossChatBubble,
-│                              #   brand icons (logo, success, failure)
+│   ├── domain/
+│   ├── data/
+│   ├── presentation/
+│   └── designsystem/
 │
 ├── feature/
 │   ├── auth/
-│   │   ├── domain/            # EmailValidator
-│   │   └── presentation/      # Register, Login, EmailVerification, ForgotPassword,
-│   │                          #   ResetPassword, RegisterSuccess screens + ViewModels,
-│   │                          #   AuthGraph nav graph, deep-link handling
+│   │   ├── domain/
+│   │   └── presentation/
 │   │
 │   └── chat/
-│       ├── domain/            # Chat entities and use-cases (scaffolded)
-│       ├── data/              # WebSocket data source via Ktor (scaffolded)
-│       ├── database/          # Room DAOs + entities for offline storage (scaffolded)
-│       └── presentation/      # ChatList screen + ViewModel (in progress)
+│       ├── domain/
+│       ├── data/
+│       ├── database/          ← schema: feature/chat/database/README.md
+│       └── presentation/
 │
-├── composeApp/                # Integration layer
-│   ├── commonMain/            # App.kt, NavigationRoot, MainViewModel, Koin init,
-│   │                          #   DeepLinkListener, ExternalUriHandler
-│   ├── androidMain/           # MainActivity, KrossChatApplication
-│   ├── iosMain/               # MainViewController
-│   └── jvmMain/               # Desktop entry point
+├── composeApp/
+│   ├── commonMain/
+│   ├── androidMain/
+│   └── iosMain/
 │
-└── iosApp/                    # Xcode project — Swift/SwiftUI iOS shell
+└── iosApp/
 ```
 
-### Dependency flow
+---
+## Database schema
 
-```
-core:domain  ←─────────────────────────────────┐
-     ↓                                          │
-core:data                                       │ no upward deps
-     ↓                                          │
-core:presentation   core:designsystem           │
-          ↓                ↓                    │
-    feature:*:domain ──────────────────────────►┘
-          ↓
-    feature:*:data   feature:*:database
-          ↓
-    feature:*:presentation
-          ↓
-       composeApp   (wires everything together)
-```
+The chat database uses Room (KMP). See **[feature/chat/database/README.md](feature/chat/database/README.md)** for the full entity schema, relationships, and DAO reference.
 
+![Database Schema](feature/chat/database/schema.svg)
+
+---
 ### Convention plugins
 
 | Plugin | Adds automatically |
@@ -147,8 +120,8 @@ links are routed to the matching screens in `AuthGraph` via `ExternalUriHandler`
 ### Adaptive layouts
 
 `KrossAdaptiveFormLayout` and `KrossAdaptiveResultLayout` respond to `DeviceConfiguration` (derived
-from `WindowSizeClass`) to render mobile portrait, mobile landscape, tablet, and desktop layouts
-from a single composable.
+from `WindowSizeClass`) to render mobile portrait, mobile landscape, and tablet layouts from a single
+composable.
 
 ### WebSocket chat
 The chat data source opens a persistent Ktor WebSocket session and exposes incoming messages as a `Flow<ChatMessage>`. The repository combines the live flow with cached Room data to deliver an offline-first experience.
@@ -174,41 +147,6 @@ Create a `local.properties` file in the project root and add your backend API ke
 API_KEY=your_api_key_here
 ```
 
-### Build & run
-
-```bash
-# Android debug APK
-./gradlew :composeApp:assembleDebug
-
-# Desktop JVM app
-./gradlew :composeApp:run
-
-# Unit tests (all modules)
-./gradlew testDebugUnitTest
-
-# Lint
-./gradlew lint
-```
-
 For iOS, open `iosApp/iosApp.xcodeproj` in Xcode and run on a simulator or device.
 
 ---
-
-## Project status
-
-- [x] Project scaffold (KMP + Compose Multiplatform, convention plugins, version catalog)
-- [x] Core design system (theme, typography, adaptive layouts, reusable components)
-- [x] Core domain (Result wrapper, DataError, AuthService interface, PasswordValidator)
-- [x] Core data (Ktor HttpClient factory, DataStore session storage, Kermit logging)
-- [x] Auth — registration screen + email validation
-- [x] Auth — login screen + session token storage
-- [x] Auth — email verification screen + deep link
-- [x] Auth — forgot password screen + deep link
-- [x] Auth — reset password screen + deep link
-- [x] Auth — session expiration handling + startup auth check
-- [x] Navigation — auth → chat flow with type-safe routes
-- [x] Android adaptive icons + iOS launch screen
-- [ ] Chat — WebSocket session management
-- [ ] Chat — Room offline persistence
-- [ ] Chat — conversation list screen (in progress)
-- [ ] Chat — message thread screen

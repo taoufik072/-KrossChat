@@ -49,7 +49,7 @@ fun KrossDropDownMenu(
                         )
                         Text(
                             text = item.title,
-                            color = MaterialTheme.colorScheme.extended.textSecondary,
+                            color =  item.contentColor,
                             fontWeight = FontWeight.Medium
                         )
                     }

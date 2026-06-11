@@ -49,7 +49,7 @@ fun ChatDetailHeader(
     isChatOptionsDropDownOpen: Boolean,
     onChatOptionsClick: () -> Unit,
     onDismissChatOptions: () -> Unit,
-    onManageChatClick: () -> Unit,
+    onChatMembersClick: () -> Unit,
     onLeaveChatClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -84,7 +84,7 @@ fun ChatDetailHeader(
                 modifier = Modifier
                     .weight(1f)
                     .clickable {
-                        onManageChatClick()
+                        onChatMembersClick()
                     }
             )
         } else {
@@ -111,7 +111,7 @@ fun ChatDetailHeader(
                         title = stringResource(Res.string.chat_members),
                         icon = vectorResource(DesignSystemRes.drawable.users_icon),
                         contentColor = MaterialTheme.colorScheme.extended.textSecondary,
-                        onClick = onManageChatClick
+                        onClick = onChatMembersClick
                     ),
                     DropDownItem(
                         title = stringResource(Res.string.leave_chat),
@@ -164,7 +164,7 @@ fun ChatDetailHeaderPreview() {
                         lastMessageSenderUsername = "Taoufik"
                     ),
                     onChatOptionsClick = {},
-                    onManageChatClick = {},
+                    onChatMembersClick = {},
                     onLeaveChatClick = {},
                     onDismissChatOptions = {},
                     onBackClick = {},
@@ -218,7 +218,7 @@ fun ChatDetailHeaderGroupPreview() {
                         lastMessageSenderUsername = "Taoufik"
                     ),
                     onChatOptionsClick = {},
-                    onManageChatClick = {},
+                    onChatMembersClick = {},
                     onLeaveChatClick = {},
                     onDismissChatOptions = {},
                     onBackClick = {},

@@ -1,4 +1,4 @@
-package com.taoufikcode.chat.presentation.components
+package com.taoufikcode.chat.presentation.chat_list_detail.participant_picker.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -19,7 +19,7 @@ import krosschat.feature.chat.presentation.generated.resources.email_or_username
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun ChatParticipantSearchTextSection(
+fun ParticipantSearchSection(
     queryState: TextFieldState,
     onAddClick: () -> Unit,
     isSearchEnabled: Boolean,

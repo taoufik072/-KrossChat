@@ -1,4 +1,4 @@
-package com.taoufikcode.chat.presentation.create_chat
+package com.taoufikcode.chat.presentation.chat_list_detail.create_chat
 
 import com.taoufikcode.chat.domain.models.Chat
 

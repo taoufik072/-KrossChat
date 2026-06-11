@@ -1,4 +1,4 @@
-package com.taoufikcode.chat.presentation.components
+package com.taoufikcode.chat.presentation.chat_list_detail.participant_picker.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -18,7 +18,7 @@ import krosschat.feature.chat.presentation.generated.resources.cancel
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun ManageChatHeaderRow(
+fun ParticipantPickerHeaderRow(
     title: String,
     onCloseClick: () -> Unit,
     modifier: Modifier = Modifier

@@ -1,4 +1,4 @@
-package com.taoufikcode.chat.presentation.components
+package com.taoufikcode.chat.presentation.chat_list_detail.participant_picker.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ManageChatButtonSection(
+fun ParticipantPickerButtonSection(
     primaryButton: @Composable () -> Unit,
     secondaryButton: @Composable () -> Unit,
     modifier: Modifier = Modifier,

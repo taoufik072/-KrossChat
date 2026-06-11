@@ -1,4 +1,4 @@
-package com.taoufikcode.chat.presentation.create_chat
+package com.taoufikcode.chat.presentation.chat_list_detail.participant_picker
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -17,62 +17,29 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.taoufikcode.chat.domain.models.Chat
-import com.taoufikcode.chat.presentation.components.ChatParticipantSearchTextSection
-import com.taoufikcode.chat.presentation.components.ChatParticipantsSelectionSection
-import com.taoufikcode.chat.presentation.components.ManageChatButtonSection
-import com.taoufikcode.chat.presentation.components.ManageChatHeaderRow
+import com.taoufikcode.chat.presentation.chat_list_detail.participant_picker.components.ParticipantPickerButtonSection
+import com.taoufikcode.chat.presentation.chat_list_detail.participant_picker.components.ParticipantPickerHeaderRow
+import com.taoufikcode.chat.presentation.chat_list_detail.participant_picker.components.ParticipantSearchSection
+import com.taoufikcode.chat.presentation.chat_list_detail.participant_picker.components.ParticipantsSelectionSection
+import com.taoufikcode.core.designsystem.components.avatar.ChatParticipantUi
 import com.taoufikcode.core.designsystem.components.brand.KrossHorizontalDivider
 import com.taoufikcode.core.designsystem.components.buttons.KrossButton
 import com.taoufikcode.core.designsystem.components.buttons.KrossButtonStyle
-import com.taoufikcode.core.designsystem.components.dialogs.KrossAdaptiveDialogSheetLayout
 import com.taoufikcode.core.designsystem.theme.KrossChatTheme
 import com.taoufikcode.core.presentation.utils.DeviceConfiguration
-import com.taoufikcode.core.presentation.utils.ObserveAsEvents
 import com.taoufikcode.core.presentation.utils.clearFocusOnTap
 import com.taoufikcode.core.presentation.utils.currentDeviceConfiguration
 import krosschat.feature.chat.presentation.generated.resources.Res
 import krosschat.feature.chat.presentation.generated.resources.cancel
-import krosschat.feature.chat.presentation.generated.resources.create_chat
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun CreateChatRoot(
-    onDismiss: () -> Unit,
-    onChatCreated: (Chat) -> Unit,
-    viewModel: CreateChatViewModel = koinViewModel()
-) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
-
-    ObserveAsEvents(viewModel.events) { event ->
-        when (event) {
-            is CreateChatEvent.OnChatCreated -> onChatCreated(event.chat)
-        }
-    }
-
-    KrossAdaptiveDialogSheetLayout(
-        onDismiss = onDismiss
-    ) {
-        CreateChatScreen(
-            state = state,
-            onAction = { action ->
-                when (action) {
-                    CreateChatAction.OnDismissDialog -> onDismiss()
-                    else -> Unit
-                }
-                viewModel.onAction(action)
-            }
-        )
-    }
-}
-
-@Composable
-fun CreateChatScreen(
-    state: CreateChatState,
-    onAction: (CreateChatAction) -> Unit,
+fun ParticipantPickerScreen(
+    headerText: String,
+    primaryButtonText: String,
+    state: ParticipantPickerState,
+    onAction: (ParticipantPickerAction) -> Unit,
 ) {
     var isTextFieldFocused by remember { mutableStateOf(false) }
     val imeHeight = WindowInsets.ime.getBottom(LocalDensity.current)
@@ -95,20 +62,20 @@ fun CreateChatScreen(
             visible = !shouldHideHeader
         ) {
             Column {
-                ManageChatHeaderRow(
-                    title = stringResource(Res.string.create_chat),
+                ParticipantPickerHeaderRow(
+                    title = headerText,
                     onCloseClick = {
-                        onAction(CreateChatAction.OnDismissDialog)
+                        onAction(ParticipantPickerAction.OnDismissDialog)
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
                 KrossHorizontalDivider()
             }
         }
-        ChatParticipantSearchTextSection(
+        ParticipantSearchSection(
             queryState = state.queryTextState,
             onAddClick = {
-                onAction(CreateChatAction.OnAddClick)
+                onAction(ParticipantPickerAction.OnAddClick)
             },
             isSearchEnabled = state.canAddParticipant,
             isLoading = state.isSearching,
@@ -120,34 +87,35 @@ fun CreateChatScreen(
             }
         )
         KrossHorizontalDivider()
-        ChatParticipantsSelectionSection(
+        ParticipantsSelectionSection(
+            existingParticipants = state.existingChatParticipants,
             selectedParticipants = state.selectedChatParticipants,
             modifier = Modifier
                 .fillMaxWidth(),
             searchResult = state.currentSearchResult
         )
         KrossHorizontalDivider()
-        ManageChatButtonSection(
+        ParticipantPickerButtonSection(
             primaryButton = {
                 KrossButton(
-                    text = stringResource(Res.string.create_chat),
+                    text = primaryButtonText,
                     onClick = {
-                        onAction(CreateChatAction.OnCreateChatClick)
+                        onAction(ParticipantPickerAction.OnPrimaryActionClick)
                     },
                     enabled = state.selectedChatParticipants.isNotEmpty(),
-                    isLoading = state.isCreatingChat
+                    isLoading = state.isSubmitting
                 )
             },
             secondaryButton = {
                 KrossButton(
                     text = stringResource(Res.string.cancel),
                     onClick = {
-                        onAction(CreateChatAction.OnDismissDialog)
+                        onAction(ParticipantPickerAction.OnDismissDialog)
                     },
                     style = KrossButtonStyle.SECONDARY
                 )
             },
-            error = state.createChatError?.asString(),
+            error = state.submitError?.asString(),
             modifier = Modifier.fillMaxWidth()
         )
     }
@@ -155,10 +123,46 @@ fun CreateChatScreen(
 
 @Preview
 @Composable
-private fun Preview() {
+private fun ParticipantPickerScreenPreview() {
     KrossChatTheme {
-        CreateChatScreen(
-            state = CreateChatState(),
+        ParticipantPickerScreen(
+            headerText = "Create chat",
+            primaryButtonText = "Create chat",
+            state = ParticipantPickerState(
+                selectedChatParticipants = listOf(
+                    ChatParticipantUi(
+                        id = "1",
+                        username = "John Doe",
+                        initials = "JD",
+                    ),
+                    ChatParticipantUi(
+                        id = "2",
+                        username = "Jane Smith",
+                        initials = "JS",
+                    )
+                )
+            ),
+            onAction = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ParticipantPickerScreenSearchingPreview() {
+    KrossChatTheme {
+        ParticipantPickerScreen(
+            headerText = "Add participant",
+            primaryButtonText = "Add",
+            state = ParticipantPickerState(
+                isSearching = true,
+                currentSearchResult = ChatParticipantUi(
+                    id = "3",
+                    username = "Alice Wonder",
+                    initials = "AW",
+                ),
+                canAddParticipant = true
+            ),
             onAction = {}
         )
     }

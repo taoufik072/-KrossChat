@@ -17,7 +17,7 @@ fun NavGraphBuilder.authGraph(
     onLoginSuccess: () -> Unit,
 ) {
     navigation<AuthGraphRoutes.Graph>(
-        startDestination = AuthGraphRoutes.Register
+        startDestination = AuthGraphRoutes.Login
     ) {
         composable<AuthGraphRoutes.Login> {
             LoginRoot(

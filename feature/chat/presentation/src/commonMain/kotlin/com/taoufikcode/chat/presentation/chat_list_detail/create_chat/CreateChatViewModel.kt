@@ -1,10 +1,12 @@
-package com.taoufikcode.chat.presentation.create_chat
+package com.taoufikcode.chat.presentation.chat_list_detail.create_chat
 
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.taoufikcode.chat.domain.ChatRepository
+import com.taoufikcode.chat.presentation.chat_list_detail.participant_picker.ParticipantPickerAction
+import com.taoufikcode.chat.presentation.chat_list_detail.participant_picker.ParticipantPickerState
 import com.taoufikcode.chat.presentation.mappers.toUi
 import com.taoufikcode.core.domain.util.DataError
 import com.taoufikcode.core.domain.util.onFailure
@@ -27,41 +29,41 @@ import krosschat.feature.chat.presentation.generated.resources.Res
 import krosschat.feature.chat.presentation.generated.resources.error_participant_not_found
 import kotlin.time.Duration.Companion.seconds
 
-@OptIn(FlowPreview::class)
 class CreateChatViewModel(
     private val chatRepository: ChatRepository
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false
 
-    private val _state = MutableStateFlow(CreateChatState())
-
     private val eventChannel = Channel<CreateChatEvent>()
     val events = eventChannel.receiveAsFlow()
-    private val searchFlow = snapshotFlow { _state.value.queryTextState.text.toString() }
-        .debounce(1.seconds)
-        .onEach { query ->
-            performSearch(query)
-        }
 
-    val state = _state
-        .onStart {
+    private val _state = MutableStateFlow(ParticipantPickerState())
+
+    @OptIn(FlowPreview::class)
+    private val searchFlow =
+        snapshotFlow { _state.value.queryTextState.text.toString() }
+            .debounce(1.seconds)
+            .onEach { query ->
+                performSearch(query)
+            }
+
+    val state = _state.onStart {
             if (!hasLoadedInitialData) {
                 searchFlow.launchIn(viewModelScope)
                 hasLoadedInitialData = true
             }
-        }
-        .stateIn(
+        }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000L),
-            initialValue = CreateChatState()
+            initialValue = ParticipantPickerState()
         )
 
-    fun onAction(action: CreateChatAction) {
+    fun onAction(action: ParticipantPickerAction) {
         when (action) {
-            CreateChatAction.OnAddClick -> addParticipant()
-            CreateChatAction.OnCreateChatClick -> createChat()
-            CreateChatAction.OnDismissDialog -> Unit
+            ParticipantPickerAction.OnAddClick -> addParticipant()
+            ParticipantPickerAction.OnPrimaryActionClick -> createChat()
+            else -> Unit
         }
     }
 
@@ -74,27 +76,23 @@ class CreateChatViewModel(
         viewModelScope.launch {
             _state.update {
                 it.copy(
-                    isCreatingChat = true,
-                    canAddParticipant = false
+                    isSubmitting = true, canAddParticipant = false
                 )
             }
 
-            chatRepository
-                .createChat(userIds)
-                .onSuccess { chat ->
+            chatRepository.createChat(userIds).onSuccess { chat ->
                     _state.update {
                         it.copy(
-                            isCreatingChat = false
+                            isSubmitting = false
                         )
                     }
                     eventChannel.send(CreateChatEvent.OnChatCreated(chat))
-                }
-                .onFailure { error ->
+                }.onFailure { error ->
                     _state.update {
                         it.copy(
-                            createChatError = error.toUiText(),
+                            submitError = error.toUiText(),
                             canAddParticipant = it.currentSearchResult != null && !it.isSearching,
-                            isCreatingChat = false
+                            isSubmitting = false
                         )
                     }
                 }
@@ -123,9 +121,7 @@ class CreateChatViewModel(
         if (query.isBlank()) {
             _state.update {
                 it.copy(
-                    currentSearchResult = null,
-                    canAddParticipant = false,
-                    searchError = null
+                    currentSearchResult = null, canAddParticipant = false, searchError = null
                 )
             }
             return
@@ -134,14 +130,11 @@ class CreateChatViewModel(
         viewModelScope.launch {
             _state.update {
                 it.copy(
-                    isSearching = true,
-                    canAddParticipant = false
+                    isSearching = true, canAddParticipant = false
                 )
             }
 
-            chatRepository
-                .searchParticipant(query)
-                .onSuccess { participant ->
+            chatRepository.searchParticipant(query).onSuccess { participant ->
                     _state.update {
                         it.copy(
                             currentSearchResult = participant.toUi(),
@@ -150,8 +143,7 @@ class CreateChatViewModel(
                             searchError = null
                         )
                     }
-                }
-                .onFailure { error ->
+                }.onFailure { error ->
                     val errorMessage = when (error) {
                         DataError.Remote.NOT_FOUND -> UiText.Resource(Res.string.error_participant_not_found)
                         else -> error.toUiText()

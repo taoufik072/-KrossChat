@@ -20,7 +20,8 @@ import androidx.compose.ui.backhandler.BackHandler
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.taoufikcode.chat.presentation.chat_detail.ChatDetailRoot
 import com.taoufikcode.chat.presentation.chat_list.ChatListRoot
-import com.taoufikcode.chat.presentation.create_chat.CreateChatRoot
+import com.taoufikcode.chat.presentation.chat_list_detail.add_participants.AddParticipantsRoot
+import com.taoufikcode.chat.presentation.chat_list_detail.create_chat.CreateChatRoot
 import com.taoufikcode.core.designsystem.theme.extended
 import com.taoufikcode.core.presentation.utils.DialogSheetScopedViewModel
 import kotlinx.coroutines.launch
@@ -98,25 +99,40 @@ fun ChatListDetailScreen(
                                 scaffoldNavigator.navigateBack()
                             }
                         }
-                    }
-                )
-            }
-            DialogSheetScopedViewModel(
-                visible = state.dialogState is DialogState.CreateChat
-            ) {
-                CreateChatRoot(
-                    onChatCreated = { chat ->
-                        onAction(ChatListDetailAction.OnDismissCurrentDialog)
-                        onAction(ChatListDetailAction.OnChatClick(chat.id))
-                        scope.launch {
-                            scaffoldNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-                        }
                     },
-                    onDismiss = {
-                        onAction(ChatListDetailAction.OnDismissCurrentDialog)
-                    }
+                    onChatMembersClick = {
+                        onAction(ChatListDetailAction.OnAddParticipantsClick)
+                    },
                 )
             }
-        }
-    )
+        })
+    DialogSheetScopedViewModel(
+        visible = state.dialogState is DialogState.CreateChat
+    ) {
+        CreateChatRoot(
+            onChatCreated = { chat ->
+                onAction(ChatListDetailAction.OnDismissCurrentDialog)
+                onAction(ChatListDetailAction.OnChatClick(chat.id))
+                scope.launch {
+                    scaffoldNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                }
+            },
+            onDismiss = {
+                onAction(ChatListDetailAction.OnDismissCurrentDialog)
+            }
+        )
+    }
+    DialogSheetScopedViewModel(
+        visible = state.dialogState is DialogState.AddParticipants
+    ) {
+        AddParticipantsRoot(
+            chatId = state.selectedChatId,
+            onMembersAdded = {
+                onAction(ChatListDetailAction.OnDismissCurrentDialog)
+            },
+            onDismiss = {
+                onAction(ChatListDetailAction.OnDismissCurrentDialog)
+            }
+        )
+    }
 }

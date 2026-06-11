@@ -6,8 +6,8 @@ import com.taoufikcode.chat.data.mappers.toLastMessageView
 import com.taoufikcode.chat.data.remote.ChatRemoteDataSource
 import com.taoufikcode.chat.database.KrossChatDatabase
 import com.taoufikcode.chat.database.entities.ChatInfoEntity
-import com.taoufikcode.chat.database.entities.ParticipantEntity
 import com.taoufikcode.chat.database.entities.ChatWithParticipantsEntity
+import com.taoufikcode.chat.database.entities.ParticipantEntity
 import com.taoufikcode.chat.domain.ChatRepository
 import com.taoufikcode.chat.domain.models.Chat
 import com.taoufikcode.chat.domain.models.ChatInfo
@@ -25,7 +25,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.supervisorScope
-import kotlin.collections.map
 
 class ChatRepositoryImpl(
     private val chatRemoteDataSource: ChatRemoteDataSource,
@@ -91,6 +90,13 @@ class ChatRepositoryImpl(
             .map { it.toDomain() }
     }
 
+    override fun observeActiveParticipantsByChatId(chatId: String): Flow<List<ChatParticipant>> {
+        return chatLocalDataBase.chatDao.getActiveParticipantsByChatId(chatId)
+            .map { participants ->
+                participants.map { it.toDomain() }
+            }
+    }
+
     override suspend fun fetchChats(): Result<List<Chat>, DataError.Remote> {
         return chatRemoteDataSource.getChats().map { chatDto -> chatDto.map { it.toDomain() } }
             .onSuccess { chats ->
@@ -123,11 +129,29 @@ class ChatRepositoryImpl(
             }
             .asEmptyResult()
     }
+
     override suspend fun leaveChat(chatId: String): EmptyResult<DataError.Remote> {
         return chatRemoteDataSource
             .leaveChat(chatId)
             .onSuccess {
                 chatLocalDataBase.chatDao.deleteChatById(chatId)
+            }
+    }
+
+    override suspend fun addParticipantsToChat(
+        chatId: String,
+        userIds: List<String>
+    ): Result<Chat, DataError.Remote> {
+        return chatRemoteDataSource
+            .addParticipantsToChat(chatId, userIds)
+            .map { it.toDomain() }
+            .onSuccess { chat ->
+                chatLocalDataBase.chatDao.upsertChatWithParticipantsAndCrossRefs(
+                    chat = chat.toEntity(),
+                    participants = chat.participants.map { it.toEntity() },
+                    participantDao = chatLocalDataBase.participantDao,
+                    crossRefDao = chatLocalDataBase.chatParticipantsJoinDao
+                )
             }
     }
 

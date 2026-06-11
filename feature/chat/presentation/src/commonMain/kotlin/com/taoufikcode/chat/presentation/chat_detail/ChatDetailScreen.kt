@@ -1,10 +1,8 @@
 package com.taoufikcode.chat.presentation.chat_detail
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -27,8 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.BackHandler
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.taoufikcode.chat.domain.models.ChatMessage
@@ -36,16 +31,22 @@ import com.taoufikcode.chat.domain.models.ChatMessageDeliveryStatus
 import com.taoufikcode.chat.presentation.chat_detail.components.ChatDetailHeader
 import com.taoufikcode.chat.presentation.chat_detail.components.MessageBox
 import com.taoufikcode.chat.presentation.chat_detail.components.MessageList
+import com.taoufikcode.chat.presentation.chat_list.components.EmptyListSection
 import com.taoufikcode.chat.presentation.components.ChatHeader
 import com.taoufikcode.chat.presentation.model.ChatUi
 import com.taoufikcode.chat.presentation.model.MessageUi
 import com.taoufikcode.core.designsystem.components.avatar.ChatParticipantUi
+import com.taoufikcode.core.designsystem.components.chat.DynamicRoundedCornerColumn
 import com.taoufikcode.core.designsystem.theme.KrossChatTheme
 import com.taoufikcode.core.designsystem.theme.extended
 import com.taoufikcode.core.presentation.utils.ObserveAsEvents
 import com.taoufikcode.core.presentation.utils.UiText
 import com.taoufikcode.core.presentation.utils.clearFocusOnTap
 import com.taoufikcode.core.presentation.utils.currentDeviceConfiguration
+import krosschat.feature.chat.presentation.generated.resources.Res
+import krosschat.feature.chat.presentation.generated.resources.no_chat_selected
+import krosschat.feature.chat.presentation.generated.resources.select_a_chat
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.time.Clock
@@ -58,6 +59,7 @@ fun ChatDetailRoot(
     chatId: String?,
     isDetailPresent: Boolean,
     onBack: () -> Unit,
+    onChatMembersClick: () -> Unit,
     viewModel: ChatDetailViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -85,7 +87,13 @@ fun ChatDetailRoot(
         state = state,
         isDetailPresent = isDetailPresent,
         snackBarState = snackbarState,
-        onAction = viewModel::onAction
+        onAction = { action ->
+            when (action) {
+                is ChatDetailAction.OnChatMembersClick -> onChatMembersClick()
+                else -> Unit
+            }
+            viewModel.onAction(action)
+        }
     )
 }
 
@@ -125,106 +133,95 @@ fun ChatDetailScreen(
                     isCornersRounded = configuration.isWideScreen,
                     modifier = Modifier.weight(1f).fillMaxWidth()
                 ) {
-                    ChatHeader {
-                        ChatDetailHeader(
-                            chatUi = state.chatUi,
-                            isDetailPresent = isDetailPresent,
-                            isChatOptionsDropDownOpen = state.isChatOptionsOpen,
-                            onChatOptionsClick = {
-                                onAction(ChatDetailAction.OnChatOptionsClick)
+                    if (state.chatUi == null) {
+                        EmptyListSection(
+                            modifier = Modifier.fillMaxSize(),
+                            title = stringResource(Res.string.no_chat_selected),
+                            description = stringResource(Res.string.select_a_chat),
+                        )
+                    } else {
+                        ChatHeader {
+                            ChatDetailHeader(
+                                chatUi = state.chatUi,
+                                isDetailPresent = isDetailPresent,
+                                isChatOptionsDropDownOpen = state.isChatOptionsOpen,
+                                onChatOptionsClick = {
+                                    onAction(ChatDetailAction.OnChatOptionsClick)
+                                },
+                                onDismissChatOptions = {
+                                    onAction(ChatDetailAction.OnDismissChatOptions)
+                                },
+                                onChatMembersClick = {
+                                    onAction(ChatDetailAction.OnChatMembersClick)
+                                },
+                                onLeaveChatClick = {
+                                    onAction(ChatDetailAction.OnLeaveChatClick)
+                                },
+                                onBackClick = {
+                                    onAction(ChatDetailAction.OnBackClick)
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+
+                        MessageList(
+                            messages = state.messages,
+                            listState = messageListState,
+                            onMessageLongClick = { message ->
+                                onAction(ChatDetailAction.OnMessageLongClick(message))
                             },
-                            onDismissChatOptions = {
-                                onAction(ChatDetailAction.OnDismissChatOptions)
+                            onMessageRetryClick = { message ->
+                                onAction(ChatDetailAction.OnRetryClick(message))
                             },
-                            onManageChatClick = {
-                                onAction(ChatDetailAction.OnChatMembersClick)
+                            onDismissMessageMenu = {
+                                onAction(ChatDetailAction.OnDismissMessageMenu)
                             },
-                            onLeaveChatClick = {
-                                onAction(ChatDetailAction.OnLeaveChatClick)
+                            onDeleteMessageClick = { message ->
+                                onAction(ChatDetailAction.OnDeleteMessageClick(message))
                             },
-                            onBackClick = {
-                                onAction(ChatDetailAction.OnBackClick)
+                            modifier = Modifier.fillMaxWidth().weight(1f)
+                        )
+
+                        AnimatedVisibility(
+                            visible = !configuration.isWideScreen
+                        ) {
+                            DynamicRoundedCornerColumn(
+                                isCornersRounded = configuration.isWideScreen
+                            ) {
+                                MessageBox(
+                                    modifier = Modifier.fillMaxWidth()
+                                        .padding(8.dp),
+                                    messageTextFieldState = state.messageTextFieldState,
+                                    isTextInputEnabled = state.canSendMessage,
+                                    connectionState = state.connectionState,
+                                    onSendClick = {
+                                        onAction(ChatDetailAction.OnSendMessageClick)
+                                    }
+                                )
+                            }
+                        }
+                    }
+
+                    if (configuration.isWideScreen) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+
+                    AnimatedVisibility(
+                        visible = configuration.isWideScreen && state.chatUi != null
+                    ) {
+                        MessageBox(
+                            messageTextFieldState = state.messageTextFieldState,
+                            isTextInputEnabled = state.canSendMessage,
+                            connectionState = state.connectionState,
+                            onSendClick = {
+                                onAction(ChatDetailAction.OnSendMessageClick)
                             },
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
-
-                    MessageList(
-                        messages = state.messages,
-                        listState = messageListState,
-                        onMessageLongClick = { message ->
-                            onAction(ChatDetailAction.OnMessageLongClick(message))
-                        },
-                        onMessageRetryClick = { message ->
-                            onAction(ChatDetailAction.OnRetryClick(message))
-                        },
-                        onDismissMessageMenu = {
-                            onAction(ChatDetailAction.OnDismissMessageMenu)
-                        },
-                        onDeleteMessageClick = { message ->
-                            onAction(ChatDetailAction.OnDeleteMessageClick(message))
-                        },
-                        modifier = Modifier.fillMaxWidth().weight(1f)
-                    )
-
-                    AnimatedVisibility(
-                        visible = !configuration.isWideScreen && state.chatUi != null
-                    ) {
-                        DynamicRoundedCornerColumn(
-                            isCornersRounded = configuration.isWideScreen
-                        ) {
-                            MessageBox(
-                                modifier = Modifier.fillMaxWidth()
-                                    .padding(8.dp),
-                                messageTextFieldState = state.messageTextFieldState,
-                                isTextInputEnabled = state.canSendMessage,
-                                connectionState = state.connectionState,
-                                onSendClick = {
-                                    onAction(ChatDetailAction.OnSendMessageClick)
-                                }
-                            )
-                        }
-                    }
-                }
-
-                if (configuration.isWideScreen) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
-
-                AnimatedVisibility(
-                    visible = configuration.isWideScreen && state.chatUi != null
-                ) {
-                    MessageBox(
-                        messageTextFieldState = state.messageTextFieldState,
-                        isTextInputEnabled = state.canSendMessage,
-                        connectionState = state.connectionState,
-                        onSendClick = {
-                            onAction(ChatDetailAction.OnSendMessageClick)
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    )
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun DynamicRoundedCornerColumn(
-    isCornersRounded: Boolean,
-    modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit
-) {
-    Column(
-        modifier = modifier.shadow(
-            elevation = if (isCornersRounded) 4.dp else 0.dp,
-            shape = if (isCornersRounded) RoundedCornerShape(16.dp) else RectangleShape
-        ).background(
-            color = MaterialTheme.colorScheme.surface,
-            shape = if (isCornersRounded) RoundedCornerShape(16.dp) else RectangleShape
-        )
-    ) {
-        content()
     }
 }
 

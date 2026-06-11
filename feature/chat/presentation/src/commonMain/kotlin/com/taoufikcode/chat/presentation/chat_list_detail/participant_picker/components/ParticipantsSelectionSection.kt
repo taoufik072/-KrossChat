@@ -1,4 +1,4 @@
-package com.taoufikcode.chat.presentation.components
+package com.taoufikcode.chat.presentation.chat_list_detail.participant_picker.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -20,57 +20,60 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.taoufikcode.core.designsystem.components.avatar.ChatParticipantUi
 import com.taoufikcode.core.designsystem.components.avatar.KrossAvatarPhoto
+import com.taoufikcode.core.designsystem.components.brand.KrossHorizontalDivider
 import com.taoufikcode.core.designsystem.theme.extended
 import com.taoufikcode.core.designsystem.theme.titleXSmall
 import com.taoufikcode.core.presentation.utils.DeviceConfiguration
 import com.taoufikcode.core.presentation.utils.currentDeviceConfiguration
 
 @Composable
-fun ColumnScope.ChatParticipantsSelectionSection(
+fun ColumnScope.ParticipantsSelectionSection(
+    existingParticipants: List<ChatParticipantUi>,
     selectedParticipants: List<ChatParticipantUi>,
     modifier: Modifier = Modifier,
     searchResult: ChatParticipantUi? = null
 ) {
     val deviceConfiguration = currentDeviceConfiguration()
-    val rootHeightModifier = when(deviceConfiguration) {
-        DeviceConfiguration.TABLET_PORTRAIT,
-        DeviceConfiguration.TABLET_LANDSCAPE,
-        DeviceConfiguration.DESKTOP -> {
-            Modifier
-                .animateContentSize()
-                .heightIn(min = 200.dp, max = 300.dp)
+    val rootHeightModifier = when (deviceConfiguration) {
+        DeviceConfiguration.TABLET_PORTRAIT, DeviceConfiguration.TABLET_LANDSCAPE, DeviceConfiguration.DESKTOP -> {
+            Modifier.animateContentSize().heightIn(min = 200.dp, max = 300.dp)
         }
-        else -> Modifier
-            .weight(1f)
+
+        else -> Modifier.weight(1f)
     }
 
     Box(
-        modifier = rootHeightModifier
-            .then(modifier)
+        modifier = rootHeightModifier.then(modifier)
     ) {
         LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
+            items(
+                items = existingParticipants, key = { "existing_${it.id}" }) { participant ->
+                ChatParticipantListItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    participantUi = participant,
+                )
+            }
+
+            if (existingParticipants.isNotEmpty()) {
+                item {
+                    KrossHorizontalDivider()
+                }
+            }
             searchResult?.let {
                 item {
                     ChatParticipantListItem(
-                        participantUi = searchResult,
-                        modifier = Modifier
-                            .fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(), participantUi = searchResult
                     )
                 }
             }
 
-            if(selectedParticipants.isNotEmpty() && searchResult == null) {
+            if (selectedParticipants.isNotEmpty() && searchResult == null) {
                 items(
-                    items = selectedParticipants,
-                    key = { it.id }
-                ) { participant ->
+                    items = selectedParticipants, key = { it.id }) { participant ->
                     ChatParticipantListItem(
-                        participantUi = participant,
-                        modifier = Modifier
-                            .fillMaxWidth()
+                        participantUi = participant, modifier = Modifier.fillMaxWidth()
                     )
                 }
             }
@@ -80,20 +83,16 @@ fun ColumnScope.ChatParticipantsSelectionSection(
 
 @Composable
 fun ChatParticipantListItem(
-    participantUi: ChatParticipantUi,
-    modifier: Modifier = Modifier
+    participantUi: ChatParticipantUi, modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
+        modifier = modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         KrossAvatarPhoto(
-            displayText = participantUi.initials,
-            imageUrl = participantUi.imageUrl
+            displayText = participantUi.initials, imageUrl = participantUi.imageUrl
         )
         Text(
             text = participantUi.username,

@@ -18,11 +18,13 @@ interface ChatRepository {
         otherUserIds: List<String>
     ): Result<Chat, DataError.Remote>
 
-    suspend fun getChats():Result<List<Chat>, DataError.Remote>
+    suspend fun getChats(): Result<List<Chat>, DataError.Remote>
 
     fun observeChats(): Flow<List<Chat>>
 
     fun observeChatById(chatId: String): Flow<ChatInfo>
+
+    fun observeActiveParticipantsByChatId(chatId: String): Flow<List<ChatParticipant>>
 
     suspend fun fetchChats(): Result<List<Chat>, DataError.Remote>
 
@@ -30,5 +32,10 @@ interface ChatRepository {
     suspend fun getChatById(chatId: String): EmptyResult<DataError.Remote>
 
     suspend fun leaveChat(chatId: String): EmptyResult<DataError.Remote>
+
+    suspend fun addParticipantsToChat(
+        chatId: String,
+        userIds: List<String>
+    ): Result<Chat, DataError.Remote>
 
 }

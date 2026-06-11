@@ -27,10 +27,10 @@ class ChatListDetailViewModel: ViewModel() {
                     dialogState = DialogState.Hidden
                 ) }
             }
-            ChatListDetailAction.OnManageChatClick -> {
+            ChatListDetailAction.OnAddParticipantsClick -> {
                 state.value.selectedChatId?.let { id ->
                     _state.update { it.copy(
-                        dialogState = DialogState.ManageChat(id)
+                        dialogState = DialogState.AddParticipants(id)
                     ) }
                 }
             }

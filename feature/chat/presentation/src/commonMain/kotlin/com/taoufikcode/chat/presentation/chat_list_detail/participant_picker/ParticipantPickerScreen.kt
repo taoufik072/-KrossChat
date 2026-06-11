@@ -150,7 +150,7 @@ private fun ParticipantPickerScreenPreview() {
 @Preview
 @Composable
 private fun ParticipantPickerScreenSearchingPreview() {
-    KrossChatTheme {
+    KrossChatTheme(darkTheme = true) {
         ParticipantPickerScreen(
             headerText = "Add participant",
             primaryButtonText = "Add",

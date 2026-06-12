@@ -33,7 +33,7 @@ fun ChatItemHeaderRow(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         KrossStackedAvatars(
-            avatars = chat.otherParticipants,
+            avatars = chat.otherParticipants.ifEmpty { listOf(chat.currentUser) },
         )
         Column(
             modifier = Modifier
@@ -42,7 +42,7 @@ fun ChatItemHeaderRow(
         ) {
             Text(
                 text = if (!isGroupChat) {
-                    chat.otherParticipants.first().username
+                    chat.otherParticipants.firstOrNull()?.username ?: chat.currentUser.username
                 } else {
                     stringResource(Res.string.group_chat)
                 },

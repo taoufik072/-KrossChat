@@ -12,7 +12,7 @@ import com.taoufikcode.chat.domain.ChatRepository
 import com.taoufikcode.chat.domain.models.Chat
 import com.taoufikcode.chat.domain.models.ChatInfo
 import com.taoufikcode.chat.domain.models.ChatParticipant
-import com.taoufikcode.core.data.network.ConnectivityObserver
+import com.taoufikcode.core.data.lifecycle.AppLifecycleObserver
 import com.taoufikcode.core.domain.util.DataError
 import com.taoufikcode.core.domain.util.EmptyResult
 import com.taoufikcode.core.domain.util.Result
@@ -35,14 +35,15 @@ import kotlinx.coroutines.supervisorScope
 class ChatRepositoryImpl(
     private val chatRemoteDataSource: ChatRemoteDataSource,
     private val chatLocalDataBase: KrossChatDatabase,
-    private val observer: ConnectivityObserver
+    private val observer: AppLifecycleObserver
 
 ) : ChatRepository {
     init {
-        observer.isConnected.onEach { isConnected ->
-            println("Is app connected? $isConnected")
+        observer.isInForeground.onEach { isInForeground ->
+            println("Is app in foreground? $isInForeground")
         }.launchIn(GlobalScope)
     }
+
     override suspend fun searchParticipant(query: String): Result<ChatParticipant, DataError.Remote> {
         return chatRemoteDataSource.searchParticipant(query).map { it.toDomain() }
     }

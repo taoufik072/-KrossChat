@@ -26,4 +26,12 @@ interface MessageDao {
 
     @Query("SELECT * FROM messageentity WHERE messageId = :messageId")
     suspend fun getMessageById(messageId: String): MessageEntity?
+
+    @Query("""
+        UPDATE messageentity
+        SET deliveryStatus = :status, deliveryStatusTimestamp = :timestamp
+        WHERE messageId = :messageId
+    """)
+    suspend fun updateDeliveryStatus(messageId: String, status: String, timestamp: Long)
+
 }

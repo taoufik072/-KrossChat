@@ -1,6 +1,8 @@
 package com.taoufikcode.chat.data.mappers
 
 import com.taoufikcode.chat.data.dto.ChatMessageDto
+import com.taoufikcode.chat.data.dto.websocket.IncomingWebSocketDto
+import com.taoufikcode.chat.data.dto.websocket.OutgoingWebSocketDto
 import com.taoufikcode.chat.database.entities.MessageEntity
 import com.taoufikcode.chat.database.view.LastMessageView
 import com.taoufikcode.chat.domain.models.ChatMessage
@@ -48,5 +50,24 @@ fun ChatMessage.toLastMessageView(): LastMessageView {
         content = content,
         timestamp = createdAt.toEpochMilliseconds(),
         deliveryStatus = deliveryStatus.name
+    )
+}
+fun ChatMessage.toNewMessage(): OutgoingWebSocketDto.NewMessage {
+    return OutgoingWebSocketDto.NewMessage(
+        messageId = id,
+        chatId = chatId,
+        content = content,
+    )
+}
+
+
+fun IncomingWebSocketDto.NewMessageDto.toEntity(): MessageEntity {
+    return MessageEntity(
+        messageId = id,
+        chatId = chatId,
+        senderId = senderId,
+        content = content,
+        timestamp = Instant.parse(createdAt).toEpochMilliseconds(),
+        deliveryStatus = ChatMessageDeliveryStatus.SENT.name
     )
 }

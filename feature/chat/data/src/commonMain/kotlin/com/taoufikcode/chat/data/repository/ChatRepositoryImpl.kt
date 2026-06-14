@@ -12,37 +12,24 @@ import com.taoufikcode.chat.domain.ChatRepository
 import com.taoufikcode.chat.domain.models.Chat
 import com.taoufikcode.chat.domain.models.ChatInfo
 import com.taoufikcode.chat.domain.models.ChatParticipant
-import com.taoufikcode.core.data.lifecycle.AppLifecycleObserver
 import com.taoufikcode.core.domain.util.DataError
 import com.taoufikcode.core.domain.util.EmptyResult
 import com.taoufikcode.core.domain.util.Result
 import com.taoufikcode.core.domain.util.asEmptyResult
 import com.taoufikcode.core.domain.util.map
 import com.taoufikcode.core.domain.util.onSuccess
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.supervisorScope
 
-@OptIn(DelicateCoroutinesApi::class)
 class ChatRepositoryImpl(
     private val chatRemoteDataSource: ChatRemoteDataSource,
     private val chatLocalDataBase: KrossChatDatabase,
-    private val observer: AppLifecycleObserver
-
 ) : ChatRepository {
-    init {
-        observer.isInForeground.onEach { isInForeground ->
-            println("Is app in foreground? $isInForeground")
-        }.launchIn(GlobalScope)
-    }
 
     override suspend fun searchParticipant(query: String): Result<ChatParticipant, DataError.Remote> {
         return chatRemoteDataSource.searchParticipant(query).map { it.toDomain() }

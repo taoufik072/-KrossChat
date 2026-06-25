@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
+import com.taoufikcode.chat.database.entities.ActiveParticipantRef
 import com.taoufikcode.chat.database.entities.ChatParticipantJoin
 import com.taoufikcode.chat.database.entities.ParticipantEntity
 
@@ -12,6 +13,12 @@ interface ChatParticipantsJoinDao {
 
     @Upsert
     suspend fun upsertCrossRefs(crossRefs: List<ChatParticipantJoin>)
+
+    @Query("SELECT chatId, userId FROM chatparticipantjoin WHERE isActive = 1")
+    suspend fun getActiveParticipantRefs(): List<ActiveParticipantRef>
+
+    @Query("SELECT userId FROM chatparticipantjoin WHERE chatId = :chatId AND isActive = 1")
+    suspend fun getActiveParticipantUserIds(chatId: String): List<String>
 
     @Query("SELECT userId FROM chatparticipantjoin WHERE chatId = :chatId")
     suspend fun getActiveParticipantIdsByChat(chatId: String): List<String>

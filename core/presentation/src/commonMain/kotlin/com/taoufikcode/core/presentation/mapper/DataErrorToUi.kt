@@ -16,6 +16,7 @@ import krosschat.core.presentation.generated.resources.error_serialization
 import krosschat.core.presentation.generated.resources.error_server
 import krosschat.core.presentation.generated.resources.error_service_unavailable
 import krosschat.core.presentation.generated.resources.error_too_many_requests
+import krosschat.core.presentation.generated.resources.error_unable_to_send_message
 import krosschat.core.presentation.generated.resources.error_unauthorized
 import krosschat.core.presentation.generated.resources.error_unknown
 
@@ -37,6 +38,9 @@ fun DataError.toUiText(): UiText {
         DataError.Remote.SERVICE_UNAVAILABLE -> string.error_service_unavailable
         DataError.Remote.SERIALIZATION -> string.error_serialization
         DataError.Remote.UNKNOWN -> string.error_unknown
+        DataError.Connection.NOT_CONNECTED -> string.error_no_internet
+        DataError.Connection.MESSAGE_SEND_FAILED -> string.error_unable_to_send_message
+
     }
     return UiText.Resource(resource)
 }

@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.taoufikcode.chat.presentation.model.MessageUi
+import com.taoufikcode.chat.presentation.util.getChatBubbleColorForUser
 import com.taoufikcode.core.designsystem.components.avatar.ChatParticipantUi
 import com.taoufikcode.core.designsystem.components.avatar.KrossAvatarPhoto
 import com.taoufikcode.core.designsystem.components.chat.KrossChatBubble
@@ -20,7 +22,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun OtherUserMessage(
     modifier: Modifier = Modifier,
     message: MessageUi.OtherUserMessage,
-) {
+    color: Color,
+    ) {
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Bottom,
@@ -32,6 +35,7 @@ fun OtherUserMessage(
         KrossChatBubble(
             messageContent = message.content,
             sender = message.sender.username,
+            color = color,
             trianglePosition = TrianglePosition.LEFT,
             formattedDateTime = message.formattedSentTime.asString()
         )
@@ -51,8 +55,9 @@ fun OtherUserMessagePreview() {
                     id = "1",
                     username = "Taoufik",
                     initials = "TA"
-                )
-            )
+                ),
+            ),
+            color = getChatBubbleColorForUser("1")
         )
     }
 }

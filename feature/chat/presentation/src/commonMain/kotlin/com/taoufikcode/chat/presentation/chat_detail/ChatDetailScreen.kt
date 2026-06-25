@@ -70,6 +70,9 @@ fun ChatDetailRoot(
             is ChatDetailEvent.OnError -> {
                 snackbarState.showSnackbar(event.error.asStringAsync())
             }
+            is    ChatDetailEvent.OnNewMessage -> {
+
+            }
         }
     }
     LaunchedEffect(chatId) {
@@ -192,7 +195,7 @@ fun ChatDetailScreen(
                                     modifier = Modifier.fillMaxWidth()
                                         .padding(8.dp),
                                     messageTextFieldState = state.messageTextFieldState,
-                                    isTextInputEnabled = state.canSendMessage,
+                                    isSendButtonEnabled = state.canSendMessage,
                                     connectionState = state.connectionState,
                                     onSendClick = {
                                         onAction(ChatDetailAction.OnSendMessageClick)
@@ -211,7 +214,7 @@ fun ChatDetailScreen(
                     ) {
                         MessageBox(
                             messageTextFieldState = state.messageTextFieldState,
-                            isTextInputEnabled = state.canSendMessage,
+                            isSendButtonEnabled = state.canSendMessage,
                             connectionState = state.connectionState,
                             onSendClick = {
                                 onAction(ChatDetailAction.OnSendMessageClick)

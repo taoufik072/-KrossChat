@@ -3,7 +3,7 @@ package com.taoufikcode.chat.presentation.chat_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.taoufikcode.chat.domain.ChatRepository
+import com.taoufikcode.chat.domain.repository.ChatRepository
 import com.taoufikcode.chat.presentation.mappers.toUi
 import com.taoufikcode.core.domain.auth.SessionStorage
 import kotlinx.coroutines.flow.MutableStateFlow

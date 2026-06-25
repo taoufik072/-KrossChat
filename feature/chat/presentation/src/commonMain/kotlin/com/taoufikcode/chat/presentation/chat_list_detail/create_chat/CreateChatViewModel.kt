@@ -4,7 +4,7 @@ import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.taoufikcode.chat.domain.ChatRepository
+import com.taoufikcode.chat.domain.repository.ChatRepository
 import com.taoufikcode.chat.presentation.chat_list_detail.participant_picker.ParticipantPickerAction
 import com.taoufikcode.chat.presentation.chat_list_detail.participant_picker.ParticipantPickerState
 import com.taoufikcode.chat.presentation.mappers.toUi

@@ -37,17 +37,19 @@ import krosschat.core.designsystem.generated.resources.Res as DesignSystemRes
 @Composable
 fun MessageBox(
     messageTextFieldState: TextFieldState,
-    isTextInputEnabled: Boolean,
+    isSendButtonEnabled: Boolean,
     connectionState: ConnectionState,
     onSendClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val isConnected = connectionState == ConnectionState.CONNECTED
+    // Optimized: get connection text once to avoid multiple calls to asString()
+    val connectionText = connectionState.toUiText().asString()
+
     KrossMultiLineTextField(
         state = messageTextFieldState,
         modifier = modifier,
         placeholder = stringResource(Res.string.send_a_message),
-        enabled = isTextInputEnabled,
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Send
         ),
@@ -61,12 +63,12 @@ fun MessageBox(
                 ) {
                     Icon(
                         imageVector = vectorResource(DesignSystemRes.drawable.cloud_off_icon),
-                        contentDescription = connectionState.toUiText().asString(),
+                        contentDescription = connectionText,
                         modifier = Modifier.size(16.dp),
                         tint = MaterialTheme.colorScheme.extended.textDisabled
                     )
                     Text(
-                        text = connectionState.toUiText().asString(),
+                        text = connectionText,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.extended.textDisabled
                     )
@@ -75,7 +77,7 @@ fun MessageBox(
             KrossButton(
                 text = stringResource(Res.string.send),
                 onClick = onSendClick,
-                enabled = isConnected && isTextInputEnabled
+                enabled = isConnected && isSendButtonEnabled
             )
         }
     )
@@ -93,7 +95,7 @@ fun MessageBoxPreview() {
         ) {
             MessageBox(
                 messageTextFieldState = rememberTextFieldState(),
-                isTextInputEnabled = true,
+                isSendButtonEnabled = true,
                 connectionState = ConnectionState.CONNECTED,
                 onSendClick = {},
                 modifier = Modifier
@@ -115,7 +117,7 @@ fun MessageBoxDisconnectedPreview() {
         ) {
             MessageBox(
                 messageTextFieldState = rememberTextFieldState(),
-                isTextInputEnabled = true,
+                isSendButtonEnabled = true,
                 connectionState = ConnectionState.DISCONNECTED,
                 onSendClick = {},
                 modifier = Modifier
@@ -137,7 +139,7 @@ fun MessageBoxConnectingPreview() {
         ) {
             MessageBox(
                 messageTextFieldState = rememberTextFieldState(),
-                isTextInputEnabled = true,
+                isSendButtonEnabled = true,
                 connectionState = ConnectionState.CONNECTING,
                 onSendClick = {},
                 modifier = Modifier

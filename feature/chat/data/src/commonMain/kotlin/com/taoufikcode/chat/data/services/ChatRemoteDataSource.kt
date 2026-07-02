@@ -27,6 +27,11 @@ class ChatRemoteDataSource(
         )
     }
 
+    suspend fun getCurrentUserInfo(): Result<ChatParticipantDto, DataError.Remote> {
+        return httpClient.get<ChatParticipantDto>(
+            route = "/participants"
+        )
+    }
     suspend fun createChat(otherUserIds: List<String>): Result<ChatDto, DataError.Remote> {
         return httpClient.post<CreateChatDto, ChatDto>(
             route = "/chat",

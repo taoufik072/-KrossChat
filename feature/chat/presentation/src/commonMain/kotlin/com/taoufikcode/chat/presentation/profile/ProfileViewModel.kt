@@ -1,10 +1,14 @@
 package com.taoufikcode.chat.presentation.profile
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.taoufikcode.chat.domain.repository.ChatRepository
+import com.taoufikcode.chat.domain.repository.ProfileRepository
 import com.taoufikcode.core.domain.auth.AuthService
+import com.taoufikcode.core.domain.auth.SessionStorage
 import com.taoufikcode.core.domain.util.DataError
 import com.taoufikcode.core.domain.util.onFailure
 import com.taoufikcode.core.domain.util.onSuccess
@@ -26,16 +30,30 @@ import krosschat.feature.chat.presentation.generated.resources.error_current_pas
 import krosschat.feature.chat.presentation.generated.resources.error_current_password_incorrect
 
 class ProfileViewModel(
-    private val authService: AuthService
+    private val authService: AuthService,
+    private val profileRepository: ProfileRepository,
+    private val sessionStorage: SessionStorage
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false
 
     private val _state = MutableStateFlow(ProfileState())
-    val state = _state
+    val state = combine(
+        _state,
+        sessionStorage.observeAuthInfo()
+    ) { currentState, authInfo ->
+        if (authInfo != null) {
+            currentState.copy(
+                username = authInfo.user.userName,
+                emailTextState = TextFieldState(initialText = authInfo.user.email),
+                profilePictureUrl = authInfo.user.profilePictureUrl,
+            )
+        } else currentState
+    }
         .onStart {
             if (!hasLoadedInitialData) {
                 observeCanChangePassword()
+                fetchCurrentUserDetails()
                 hasLoadedInitialData = true
             }
         }
@@ -51,6 +69,12 @@ class ProfileViewModel(
             is ProfileAction.OnToggleCurrentPasswordVisibility -> toggleCurrentPasswordVisibility()
             is ProfileAction.OnToggleNewPasswordVisibility -> toggleNewPasswordVisibility()
             else -> Unit
+        }
+    }
+
+    private fun fetchCurrentUserDetails() {
+        viewModelScope.launch {
+            profileRepository.fetchCurrentUser()
         }
     }
 
@@ -72,11 +96,11 @@ class ProfileViewModel(
 
     private fun observeCanChangePassword() {
         val isCurrentPasswordValidFlow = snapshotFlow {
-            state.value.currentPasswordTextState.text.toString()
+            _state.value.currentPasswordTextState.text.toString()
         }.map { it.isNotBlank() }.distinctUntilChanged()
 
         val isNewPasswordValidFlow = snapshotFlow {
-            state.value.newPasswordTextState.text.toString()
+            _state.value.newPasswordTextState.text.toString()
         }.map {
             PasswordValidator.validate(it).isValidPassword
         }.distinctUntilChanged()
@@ -94,7 +118,7 @@ class ProfileViewModel(
     }
 
     private fun changePassword() {
-        if (!state.value.canChangePassword && state.value.isChangingPassword) {
+        if (!state.value.canChangePassword || state.value.isChangingPassword) {
             return
         }
 

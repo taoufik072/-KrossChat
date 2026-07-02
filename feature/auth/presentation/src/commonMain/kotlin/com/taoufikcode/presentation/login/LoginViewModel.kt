@@ -38,14 +38,6 @@ class LoginViewModel(
     private val eventChannel = Channel<LoginEvent>()
     val events = eventChannel.receiveAsFlow()
 
-    private val isEmailValidFlow = snapshotFlow { state.value.emailTextFieldState.text.toString() }
-        .map { email -> EmailValidator.validate(email) }
-        .distinctUntilChanged()
-
-    private val isPasswordNotBlankFlow = snapshotFlow { state.value.passwordTextFieldState.text.toString() }
-        .map { it.isNotBlank() }
-        .distinctUntilChanged()
-
     private val _state = MutableStateFlow(LoginState())
     val state = _state
         .onStart {
@@ -59,6 +51,14 @@ class LoginViewModel(
             started = SharingStarted.WhileSubscribed(5_000L),
             initialValue = LoginState()
         )
+
+    private val isEmailValidFlow = snapshotFlow { _state.value.emailTextFieldState.text.toString() }
+        .map { email -> EmailValidator.validate(email) }
+        .distinctUntilChanged()
+
+    private val isPasswordNotBlankFlow = snapshotFlow { _state.value.passwordTextFieldState.text.toString() }
+        .map { it.isNotBlank() }
+        .distinctUntilChanged()
 
     private val isRegisteringFlow = state
         .map { it.isLoggingIn }

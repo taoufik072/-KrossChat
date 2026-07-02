@@ -6,11 +6,13 @@ import com.taoufikcode.chat.data.network.KtorWebSocketConnector
 import com.taoufikcode.chat.data.network.WebSocketChatConnectionClient
 import com.taoufikcode.chat.data.repository.ChatMessageRepositoryImpl
 import com.taoufikcode.chat.data.repository.ChatRepositoryImpl
+import com.taoufikcode.chat.data.repository.ProfileRepositoryImpl
 import com.taoufikcode.chat.data.services.ChatRemoteDataSource
 import com.taoufikcode.chat.data.services.ChatSyncData
 import com.taoufikcode.chat.database.DatabaseFactory
 import com.taoufikcode.chat.domain.repository.ChatMessageRepository
 import com.taoufikcode.chat.domain.repository.ChatRepository
+import com.taoufikcode.chat.domain.repository.ProfileRepository
 import com.taoufikcode.chat.domain.service.ChatConnectionClient
 import com.taoufikcode.chat.domain.service.ChatSyncService
 import kotlinx.serialization.json.Json
@@ -24,6 +26,7 @@ val chatDataModule = module {
     includes(platformChatDataModule)
     singleOf(::ChatRepositoryImpl) bind ChatRepository::class
     singleOf(::ChatMessageRepositoryImpl) bind ChatMessageRepository::class
+    singleOf(::ProfileRepositoryImpl) bind ProfileRepository::class
     singleOf(::WebSocketChatConnectionClient) bind ChatConnectionClient::class
     singleOf(::ChatSyncData) bind ChatSyncService::class
     singleOf(::ConnectionRetryHandler)

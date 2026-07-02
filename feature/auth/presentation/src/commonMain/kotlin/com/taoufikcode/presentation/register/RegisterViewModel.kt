@@ -1,8 +1,6 @@
 package com.taoufikcode.presentation.register
 
 import androidx.compose.runtime.snapshotFlow
-import androidx.compose.ui.graphics.Path.Companion.combine
-import androidx.compose.ui.text.style.TextDecoration.Companion.combine
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.taoufikcode.core.domain.auth.AuthService
@@ -43,7 +41,6 @@ class RegisterViewModel(
         .onStart {
             if (!hasLoadedInitialData) {
                 observeValidationState()
-                /** Load initial data here **/
                 hasLoadedInitialData = true
             }
         }
@@ -52,13 +49,13 @@ class RegisterViewModel(
             started = SharingStarted.WhileSubscribed(5_000L),
             initialValue = RegisterState()
         )
-    private val isEmailValidFlow = snapshotFlow { state.value.emailTextState.text.toString() }
+    private val isEmailValidFlow = snapshotFlow { _state.value.emailTextState.text.toString() }
         .map { email -> EmailValidator.validate(email) }
         .distinctUntilChanged()
-    private val isUsernameValidFlow = snapshotFlow { state.value.usernameTextState.text.toString() }
+    private val isUsernameValidFlow = snapshotFlow { _state.value.usernameTextState.text.toString() }
         .map { username -> username.length in 3..20 }
         .distinctUntilChanged()
-    private val isPasswordValidFlow = snapshotFlow { state.value.passwordTextState.text.toString() }
+    private val isPasswordValidFlow = snapshotFlow { _state.value.passwordTextState.text.toString() }
         .map { password -> PasswordValidator.validate(password).isValidPassword }
         .distinctUntilChanged()
 

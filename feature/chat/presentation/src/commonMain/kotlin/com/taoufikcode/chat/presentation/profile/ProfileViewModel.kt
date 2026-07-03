@@ -5,7 +5,6 @@ import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.taoufikcode.chat.domain.repository.ChatRepository
 import com.taoufikcode.chat.domain.repository.ProfileRepository
 import com.taoufikcode.core.domain.auth.AuthService
 import com.taoufikcode.core.domain.auth.SessionStorage
@@ -28,6 +27,7 @@ import kotlinx.coroutines.launch
 import krosschat.feature.chat.presentation.generated.resources.Res
 import krosschat.feature.chat.presentation.generated.resources.error_current_password_equal_to_new_one
 import krosschat.feature.chat.presentation.generated.resources.error_current_password_incorrect
+import krosschat.feature.chat.presentation.generated.resources.error_invalid_file_type
 
 class ProfileViewModel(
     private val authService: AuthService,
@@ -45,6 +45,7 @@ class ProfileViewModel(
         if (authInfo != null) {
             currentState.copy(
                 username = authInfo.user.userName,
+                userInitials = authInfo.user.userName.take(2),
                 emailTextState = TextFieldState(initialText = authInfo.user.email),
                 profilePictureUrl = authInfo.user.profilePictureUrl,
             )
@@ -68,7 +69,57 @@ class ProfileViewModel(
             is ProfileAction.OnChangePasswordClick -> changePassword()
             is ProfileAction.OnToggleCurrentPasswordVisibility -> toggleCurrentPasswordVisibility()
             is ProfileAction.OnToggleNewPasswordVisibility -> toggleNewPasswordVisibility()
+            is ProfileAction.OnPictureSelected -> uploadProfilePicture(
+                action.bytes,
+                action.mimeType
+            )
+
             else -> Unit
+        }
+    }
+
+    private fun uploadProfilePicture(bytes: ByteArray, mimeType: String?) {
+        if (_state.value.isUploadingImage) {
+            return
+        }
+
+        if (mimeType == null) {
+            _state.update {
+                it.copy(
+                    imageError = UiText.Resource(Res.string.error_invalid_file_type)
+                )
+            }
+            return
+        }
+
+        _state.update {
+            it.copy(
+                isUploadingImage = true,
+                imageError = null
+            )
+        }
+
+        viewModelScope.launch {
+            profileRepository
+                .uploadProfilePicture(
+                    imageBytes = bytes,
+                    mimeType = mimeType
+                )
+                .onSuccess {
+                    _state.update {
+                        it.copy(
+                            isUploadingImage = false,
+                        )
+                    }
+                }
+                .onFailure { error ->
+                    _state.update {
+                        it.copy(
+                            imageError = error.toUiText(),
+                            isUploadingImage = false
+                        )
+                    }
+                }
         }
     }
 

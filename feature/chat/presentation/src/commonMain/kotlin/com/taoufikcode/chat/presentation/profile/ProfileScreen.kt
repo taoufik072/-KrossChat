@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.taoufikcode.chat.presentation.profile.components.ProfileHeaderSection
 import com.taoufikcode.chat.presentation.profile.components.ProfileSectionLayout
+import com.taoufikcode.chat.presentation.profile.components.rememberImagePickerLauncher
 import com.taoufikcode.core.designsystem.components.avatar.AvatarSize
 import com.taoufikcode.core.designsystem.components.avatar.KrossAvatarPhoto
 import com.taoufikcode.core.designsystem.components.brand.KrossHorizontalDivider
@@ -69,7 +70,12 @@ fun ProfileRoot(
     viewModel: ProfileViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-
+    val launcher = rememberImagePickerLauncher { pickedImageData ->
+        viewModel.onAction(ProfileAction.OnPictureSelected(
+            pickedImageData.bytes,
+            pickedImageData.mimeType
+        ))
+    }
     KrossAdaptiveDialogSheetLayout(
         onDismiss = onDismiss
     ) {
@@ -78,6 +84,9 @@ fun ProfileRoot(
             onAction = { action ->
                 when (action) {
                     is ProfileAction.OnDismiss -> onDismiss()
+                    is ProfileAction.OnUploadPictureClick -> {
+                        launcher.launch()
+                    }
                     else -> Unit
                 }
                 viewModel.onAction(action)

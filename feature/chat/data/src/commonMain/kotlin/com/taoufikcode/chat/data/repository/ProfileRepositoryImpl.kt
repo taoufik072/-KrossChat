@@ -6,6 +6,7 @@ import com.taoufikcode.chat.domain.models.ChatParticipant
 import com.taoufikcode.chat.domain.repository.ProfileRepository
 import com.taoufikcode.core.domain.auth.SessionStorage
 import com.taoufikcode.core.domain.util.DataError
+import com.taoufikcode.core.domain.util.EmptyResult
 import com.taoufikcode.core.domain.util.Result
 import com.taoufikcode.core.domain.util.map
 import com.taoufikcode.core.domain.util.onSuccess
@@ -34,4 +35,57 @@ class ProfileRepositoryImpl(
                 )
             }
     }
+
+
+    override suspend fun uploadProfilePicture(
+        imageBytes: ByteArray,
+        mimeType: String
+    ): EmptyResult<DataError.Remote> {
+        val result = chatRemoteDataSource.getProfilePictureUploadUrl(mimeType).map { it.toDomain() }
+
+        if (result is Result.Failure) {
+            return result
+        }
+
+        val uploadUrls = (result as Result.Success).data
+        val uploadResult = chatRemoteDataSource.uploadProfilePicture(
+            uploadUrl = uploadUrls.uploadUrl,
+            imageBytes = imageBytes,
+            headers = uploadUrls.headers
+        )
+
+        if (uploadResult is Result.Failure) {
+            return uploadResult
+        }
+
+        return chatRemoteDataSource
+            .confirmProfilePictureUpload(uploadUrls.publicUrl)
+            .onSuccess {
+                val currentAuthInfo = sessionStorage.observeAuthInfo().first()
+                sessionStorage.set(
+                    currentAuthInfo?.copy(
+                        user = currentAuthInfo.user.copy(
+                            profilePictureUrl = uploadUrls.publicUrl
+                        )
+                    )
+                )
+            }
+    }
+
+    override suspend fun deleteProfilePicture(): EmptyResult<DataError.Remote> {
+        return chatRemoteDataSource
+            .deleteProfilePicture()
+            .onSuccess {
+                val authInfo = sessionStorage.observeAuthInfo().first()
+                sessionStorage.set(
+                    authInfo?.copy(
+                        user = authInfo.user.copy(
+                            profilePictureUrl = null
+                        )
+                    )
+                )
+            }
+    }
+
+
 }

@@ -29,12 +29,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.taoufikcode.chat.presentation.chat_list.components.ChatListHeader
 import com.taoufikcode.chat.presentation.chat_list.components.ChatListItemUi
 import com.taoufikcode.chat.presentation.chat_list.components.EmptyListSection
-import com.taoufikcode.chat.presentation.model.ChatUi
 import com.taoufikcode.core.designsystem.components.brand.KrossHorizontalDivider
 import com.taoufikcode.core.designsystem.components.buttons.KrossFloatingActionButton
 import com.taoufikcode.core.designsystem.components.dialogs.DestructiveConfirmationDialog
 import com.taoufikcode.core.designsystem.theme.KrossChatTheme
 import com.taoufikcode.core.designsystem.theme.extended
+import com.taoufikcode.core.presentation.permissions.Permissions
+import com.taoufikcode.core.presentation.permissions.rememberPermissionController
 import krosschat.feature.chat.presentation.generated.resources.Res
 import krosschat.feature.chat.presentation.generated.resources.cancel
 import krosschat.feature.chat.presentation.generated.resources.create_chat
@@ -59,9 +60,15 @@ fun ChatListRoot(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }
+    val permissionController = rememberPermissionController()
+
     LaunchedEffect(selectedChatId) {
         viewModel.onAction(ChatListAction.OnSelectChat(selectedChatId))
     }
+    LaunchedEffect(true) {
+        permissionController.requestPermission(Permissions.NOTIFICATIONS)
+    }
+
     ChatListScreen(
         state = state,
         onAction = { action ->

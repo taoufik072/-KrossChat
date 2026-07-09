@@ -5,10 +5,13 @@ import androidx.datastore.preferences.core.Preferences
 import com.taoufikcode.core.data.auth.createDataStore
 import com.taoufikcode.core.data.lifecycle.AppLifecycleObserver
 import com.taoufikcode.core.data.network.ConnectivityObserver
+import com.taoufikcode.core.data.notification.FirebasePushNotificationService
+import com.taoufikcode.core.domain.notification.PushNotificationService
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.darwin.Darwin
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 actual val platformCoreModule: Module = module {
@@ -18,4 +21,6 @@ actual val platformCoreModule: Module = module {
     single<DataStore<Preferences>> {
         createDataStore()
     }
+    singleOf(::FirebasePushNotificationService) bind PushNotificationService::class
+
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "894239200800",
+    "project_id": "teufmuz",
+    "storage_bucket": "teufmuz.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:894239200800:android:f4cf820a284648a8b04e45",
+        "android_client_info": {
+          "package_name": "com.taoufikcode.krosschat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFHJjmKy9wlFNQHBt-c28reXgKFDn-GRQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

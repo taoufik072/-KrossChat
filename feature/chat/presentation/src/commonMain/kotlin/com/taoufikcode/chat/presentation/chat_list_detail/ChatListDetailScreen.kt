@@ -30,12 +30,14 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ChatListDetailRoot(
+    chatId: String?,
     onLogout: () -> Unit,
     viewModel: ChatListDetailViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     ChatListDetailScreen(
+        initialChatId = chatId,
         state = state,
         onAction = viewModel::onAction,
         onLogout = onLogout
@@ -45,6 +47,7 @@ fun ChatListDetailRoot(
 @Composable
 fun ChatListDetailScreen(
     state: ChatListDetailState,
+    initialChatId: String?,
     onAction: (ChatListDetailAction) -> Unit,
     onLogout: () -> Unit
 ) {
@@ -56,6 +59,12 @@ fun ChatListDetailScreen(
 
     BackHandler(enabled = scaffoldNavigator.canNavigateBack()) {
         scope.launch { scaffoldNavigator.navigateBack() }
+    }
+    LaunchedEffect(initialChatId) {
+        if (initialChatId != null) {
+            onAction(ChatListDetailAction.OnSelectChat(initialChatId))
+            scaffoldNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+        }
     }
 
     val detailPane = scaffoldNavigator.scaffoldValue[ListDetailPaneScaffoldRole.Detail]

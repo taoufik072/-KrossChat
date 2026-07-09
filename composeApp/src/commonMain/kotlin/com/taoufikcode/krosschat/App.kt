@@ -43,6 +43,7 @@ fun App(
     }
     KrossChatTheme {
         if(!state.isCheckingAuth) {
+            DeepLinkListener(navController)
             NavigationRoot(
                 navController = navController,
                 startDestination = if(state.isLoggedIn) {

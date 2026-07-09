@@ -4,9 +4,15 @@ package com.taoufikcode.krosschat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.taoufikcode.core.domain.auth.SessionStorage
+import com.taoufikcode.core.domain.logging.KrossChatLogger
+import com.taoufikcode.core.domain.notification.DeviceTokenService
+import com.taoufikcode.core.domain.notification.PushNotificationService
+import com.taoufikcode.core.domain.util.onFailure
+import com.taoufikcode.core.domain.util.onSuccess
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -17,7 +23,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val sessionStorage: SessionStorage
+    private val sessionStorage: SessionStorage,
+    private val pushNotificationService: PushNotificationService,
+    private val deviceTokenService: DeviceTokenService,
+    private val logger: KrossChatLogger
 ) : ViewModel() {
 
 
@@ -26,6 +35,9 @@ class MainViewModel(
 
     private var hasLoadedInitialData = false
     private var previousRefreshToken: String? = null
+    private var currentDeviceToken: String? = null
+    private var previousDeviceToken: String? = null
+
 
     private val _state = MutableStateFlow(MainState())
     val state = _state
@@ -67,11 +79,37 @@ class MainViewModel(
                             isLoggedIn = false
                         )
                     }
+                    currentDeviceToken?.let {
+                        deviceTokenService.unregisterToken(it)
+                    }
                     eventChannel.send(MainEvent.OnSessionExpired)
                 }
 
                 previousRefreshToken = currentRefreshToken
+            }.combine(
+                pushNotificationService.observeDeviceToken()
+            ) { authInfo, deviceToken ->
+                currentDeviceToken = deviceToken
+                if (authInfo != null && deviceToken != previousDeviceToken && deviceToken != null) {
+                    registerDeviceToken(deviceToken, getPlatform().os)
+                }
             }
             .launchIn(viewModelScope)
+    }
+
+    private fun registerDeviceToken(token: String, platform: String) {
+        viewModelScope.launch {
+            deviceTokenService.registerToken(token, platform)
+                .onSuccess {
+
+                    logger.i("Successfully registered device token") {
+                        "Token: $token"
+                    }
+                }
+                .onFailure { error ->
+                    logger.e("failed to register device token", null) { error.name }
+                    return@launch
+                }
+        }
     }
 }

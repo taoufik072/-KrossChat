@@ -2,7 +2,7 @@ package com.taoufikcode.chat.presentation.mappers
 
 import com.taoufikcode.chat.domain.models.MessageWithSender
 import com.taoufikcode.chat.presentation.model.MessageUi
-import com.taoufikcode.chat.presentation.util.DateUtils
+import com.taoufikcode.core.presentation.utils.DateUtils
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 

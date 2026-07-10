@@ -86,7 +86,7 @@ class WebSocketChatConnectionClient(
             }
 
             is IncomingWebSocketDto.ChatParticipantsChangedDto -> {
-                chatSyncData.refreshChat(message.chatId)
+                chatSyncData.refreshChatById(message.chatId)
                 null
             }
 
@@ -100,7 +100,7 @@ class WebSocketChatConnectionClient(
     private suspend fun handleNewMessage(message: IncomingWebSocketDto.NewMessageDto): ChatMessage {
         val chatExists = chatLocalDataBase.chatDao.getChatById(message.chatId) != null
         if (!chatExists) {
-            chatSyncData.refreshChat(message.chatId)
+            chatSyncData.refreshChatById(message.chatId)
         }
 
         val entity = message.toEntity()

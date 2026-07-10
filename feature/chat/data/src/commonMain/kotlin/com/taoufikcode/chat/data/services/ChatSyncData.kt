@@ -5,6 +5,8 @@ import com.taoufikcode.chat.data.mappers.toEntity
 import com.taoufikcode.chat.database.KrossChatDatabase
 import com.taoufikcode.chat.domain.models.Chat
 import com.taoufikcode.chat.domain.service.ChatSyncService
+import com.taoufikcode.core.domain.util.DataError
+import com.taoufikcode.core.domain.util.EmptyResult
 import com.taoufikcode.core.domain.util.asEmptyResult
 import com.taoufikcode.core.domain.util.map
 import com.taoufikcode.core.domain.util.onSuccess
@@ -13,8 +15,8 @@ class ChatSyncData(
     private val chatLocalDatabase: KrossChatDatabase,
     private val remoteDataSource: ChatRemoteDataSource
 ) : ChatSyncService {
-    override suspend fun refreshChat(chatId: String) {
-        remoteDataSource.getChatById(chatId)
+    override suspend fun refreshChatById(chatId: String): EmptyResult<DataError.Remote> {
+        return remoteDataSource.getChatById(chatId)
             .map { it.toDomain() }
             .onSuccess { chat -> cacheChat(chat) }
             .asEmptyResult()

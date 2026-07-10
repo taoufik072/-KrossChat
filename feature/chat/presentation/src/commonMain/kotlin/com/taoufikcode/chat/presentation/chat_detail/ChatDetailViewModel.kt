@@ -41,6 +41,7 @@ import krosschat.feature.chat.presentation.generated.resources.today
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
+@ExperimentalCoroutinesApi
 class ChatDetailViewModel(
     private val chatRepository: ChatRepository,
     sessionStorage: SessionStorage,
@@ -57,11 +58,11 @@ class ChatDetailViewModel(
 
     private var currentPaginator: Paginator<String?, ChatMessage>? = null
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     private val chatInfoFlow = _chatId
         .onEach { chatId ->
             if (chatId != null) {
                 setupPaginatorForChat(chatId)
+                loadNextItems()
             } else {
                 currentPaginator = null
             }

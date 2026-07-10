@@ -15,4 +15,8 @@
     <string name="error_service_unavailable">Service unavailable, please try again later</string>
     <string name="error_serialization">Serialization error</string>
     <string name="error_unable_to_send_message">An error happened while sending the message</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="today_x">Today, %1$s</string>
+    <string name="yesterday_x">Yesterday, %1$s</string>
 </resources>

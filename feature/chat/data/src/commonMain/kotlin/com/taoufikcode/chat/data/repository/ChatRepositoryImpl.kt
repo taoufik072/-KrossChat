@@ -1,20 +1,19 @@
 package com.taoufikcode.chat.data.repository
 
-import com.taoufikcode.chat.data.services.ChatSyncData
 import com.taoufikcode.chat.data.mappers.toDomain
 import com.taoufikcode.chat.data.mappers.toEntity
 import com.taoufikcode.chat.data.mappers.toLastMessageView
 import com.taoufikcode.chat.data.services.ChatRemoteDataSource
+import com.taoufikcode.chat.data.services.ChatSyncData
 import com.taoufikcode.chat.database.KrossChatDatabase
 import com.taoufikcode.chat.database.entities.ChatWithParticipantsEntity
-import com.taoufikcode.chat.domain.repository.ChatRepository
 import com.taoufikcode.chat.domain.models.Chat
 import com.taoufikcode.chat.domain.models.ChatInfo
 import com.taoufikcode.chat.domain.models.ChatParticipant
+import com.taoufikcode.chat.domain.repository.ChatRepository
 import com.taoufikcode.core.domain.util.DataError
 import com.taoufikcode.core.domain.util.EmptyResult
 import com.taoufikcode.core.domain.util.Result
-import com.taoufikcode.core.domain.util.asEmptyResult
 import com.taoufikcode.core.domain.util.map
 import com.taoufikcode.core.domain.util.onSuccess
 import kotlinx.coroutines.flow.Flow
@@ -103,7 +102,8 @@ class ChatRepositoryImpl(
     }
 
     override suspend fun getChatById(chatId: String): EmptyResult<DataError.Remote> {
-        return chatRemoteDataSource.getChatById(chatId).asEmptyResult()
+        return chatSyncDataSource.refreshChatById(chatId)
+
     }
 
     override suspend fun leaveChat(chatId: String): EmptyResult<DataError.Remote> {

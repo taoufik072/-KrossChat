@@ -1,5 +1,6 @@
-package com.taoufikcode.chat.presentation.util
-import com.taoufikcode.core.presentation.utils.UiText
+package com.taoufikcode.core.presentation.utils
+
+import com.taoufikcode.core.presentation.utils.UiText.Resource
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
@@ -8,14 +9,13 @@ import kotlinx.datetime.format
 import kotlinx.datetime.format.char
 import kotlinx.datetime.minus
 import kotlinx.datetime.toLocalDateTime
-import krosschat.feature.chat.presentation.generated.resources.Res
-import krosschat.feature.chat.presentation.generated.resources.today
-import krosschat.feature.chat.presentation.generated.resources.today_x
-import krosschat.feature.chat.presentation.generated.resources.yesterday
-import krosschat.feature.chat.presentation.generated.resources.yesterday_x
+import krosschat.core.presentation.generated.resources.Res
+import krosschat.core.presentation.generated.resources.today
+import krosschat.core.presentation.generated.resources.today_x
+import krosschat.core.presentation.generated.resources.yesterday
+import krosschat.core.presentation.generated.resources.yesterday_x
 import kotlin.time.Clock
 import kotlin.time.Instant
-
 
 object DateUtils {
 
@@ -44,9 +44,9 @@ object DateUtils {
             }
         )
 
-        return when(messageDateTime.date) {
-            todayDate -> UiText.Resource(Res.string.today_x, arrayOf(formattedTime))
-            yesterdayDate -> UiText.Resource(Res.string.yesterday_x, arrayOf(formattedTime))
+        return when (messageDateTime.date) {
+            todayDate -> Resource(Res.string.today_x, arrayOf(formattedTime))
+            yesterdayDate -> Resource(Res.string.yesterday_x, arrayOf(formattedTime))
             else -> UiText.DynamicString(formattedDateTime)
         }
     }
@@ -56,9 +56,9 @@ object DateUtils {
         val today = clock.now().toLocalDateTime(timeZone).date
         val yesterday = today.minus(1, DateTimeUnit.DAY)
 
-        return when(date) {
-            today -> UiText.Resource(Res.string.today)
-            yesterday -> UiText.Resource(Res.string.yesterday)
+        return when (date) {
+            today -> Resource(Res.string.today)
+            yesterday -> Resource(Res.string.yesterday)
             else -> {
                 val formatted = date.format(
                     LocalDate.Format {

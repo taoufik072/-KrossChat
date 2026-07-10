@@ -45,6 +45,16 @@ interface MessageDao {
         WHERE messageId = :messageId
     """)
     suspend fun updateDeliveryStatus(messageId: String, status: String, timestamp: Long)
+
+    @Query("""
+        SELECT m.chatId AS chatId, COUNT(*) AS unreadCount
+        FROM messageentity m
+        LEFT JOIN chatreadstateentity r ON r.chatId = m.chatId
+        WHERE m.timestamp > COALESCE(r.lastReadAt, 0) AND m.senderId != :currentUserId
+        GROUP BY m.chatId
+    """)
+    fun observeUnreadCounts(currentUserId: String): Flow<List<ChatUnreadCount>>
+
     @Transaction
     suspend fun upsertMessagesAndSyncIfNecessary(
         chatId: String,

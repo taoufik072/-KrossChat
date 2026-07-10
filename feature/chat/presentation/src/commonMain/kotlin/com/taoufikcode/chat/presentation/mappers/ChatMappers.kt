@@ -12,6 +12,7 @@ fun Chat.toUi(currentUserId: String): ChatUi {
         lastMessage = lastMessage,
         lastMessageSenderUsername = participants
             .find { it.userId == lastMessage?.senderId }
-            ?.username
+            ?.username,
+        unreadCount = unreadCount
     )
 }

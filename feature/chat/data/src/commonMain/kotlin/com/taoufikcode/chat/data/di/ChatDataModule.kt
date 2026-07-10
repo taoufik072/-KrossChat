@@ -10,6 +10,7 @@ import com.taoufikcode.chat.data.repository.ProfileRepositoryImpl
 import com.taoufikcode.chat.data.services.ChatRemoteDataSource
 import com.taoufikcode.chat.data.services.ChatSyncData
 import com.taoufikcode.chat.database.DatabaseFactory
+import com.taoufikcode.chat.database.migrations.MIGRATION_1_2
 import com.taoufikcode.chat.domain.repository.ChatMessageRepository
 import com.taoufikcode.chat.domain.repository.ChatRepository
 import com.taoufikcode.chat.domain.repository.ProfileRepository
@@ -36,6 +37,7 @@ val chatDataModule = module {
         get<DatabaseFactory>()
             .create()
             .setDriver(BundledSQLiteDriver())
+            .addMigrations(MIGRATION_1_2)
             .build()
     }
     single {

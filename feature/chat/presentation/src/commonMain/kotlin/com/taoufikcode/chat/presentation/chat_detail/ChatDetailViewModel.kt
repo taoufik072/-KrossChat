@@ -274,6 +274,7 @@ class ChatDetailViewModel(
 
             if (lastNewId != lastCurrentId && isNearBottom) {
                 eventChannel.send(ChatDetailEvent.OnNewMessage)
+                _chatId.value?.let { chatRepository.markChatAsRead(it) }
             }
         }.launchIn(viewModelScope)
     }
@@ -300,6 +301,7 @@ class ChatDetailViewModel(
         viewModelScope.launch {
             chatId?.let {
                 chatRepository.getChatById(chatId)
+                chatRepository.markChatAsRead(chatId)
             }
         }
     }

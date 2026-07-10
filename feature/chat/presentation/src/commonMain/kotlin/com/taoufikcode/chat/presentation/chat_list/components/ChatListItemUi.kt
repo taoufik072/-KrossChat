@@ -24,9 +24,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.taoufikcode.chat.domain.models.ChatMessage
 import com.taoufikcode.chat.domain.models.ChatMessageDeliveryStatus
+import androidx.compose.ui.Alignment
 import com.taoufikcode.chat.presentation.components.ChatItemHeaderRow
 import com.taoufikcode.chat.presentation.model.ChatUi
 import com.taoufikcode.core.designsystem.components.avatar.ChatParticipantUi
+import com.taoufikcode.core.designsystem.components.badge.KrossCountBadge
 import com.taoufikcode.core.designsystem.theme.KrossChatTheme
 import com.taoufikcode.core.designsystem.theme.extended
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -85,6 +87,14 @@ fun ChatListItemUi(
                     overflow = TextOverflow.Ellipsis
                 )
             }
+        }
+        if (chat.unreadCount > 0) {
+            KrossCountBadge(
+                count = chat.unreadCount,
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(end = 12.dp)
+            )
         }
         Box(
             modifier = Modifier

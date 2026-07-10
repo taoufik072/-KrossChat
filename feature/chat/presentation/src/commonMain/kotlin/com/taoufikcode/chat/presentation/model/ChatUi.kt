@@ -10,5 +10,6 @@ data class ChatUi(
     val currentUser: ChatParticipantUi,
     val otherParticipants: List<ChatParticipantUi>,
     val lastMessage: ChatMessage?,
-    val lastMessageSenderUsername: String?
+    val lastMessageSenderUsername: String?,
+    val unreadCount: Int = 0
 )

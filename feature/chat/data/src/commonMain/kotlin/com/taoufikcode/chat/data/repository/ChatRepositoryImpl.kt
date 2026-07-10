@@ -6,24 +6,31 @@ import com.taoufikcode.chat.data.mappers.toLastMessageView
 import com.taoufikcode.chat.data.services.ChatRemoteDataSource
 import com.taoufikcode.chat.data.services.ChatSyncData
 import com.taoufikcode.chat.database.KrossChatDatabase
+import com.taoufikcode.chat.database.entities.ChatReadStateEntity
 import com.taoufikcode.chat.database.entities.ChatWithParticipantsEntity
 import com.taoufikcode.chat.domain.models.Chat
 import com.taoufikcode.chat.domain.models.ChatInfo
 import com.taoufikcode.chat.domain.models.ChatParticipant
 import com.taoufikcode.chat.domain.repository.ChatRepository
+import com.taoufikcode.core.domain.auth.SessionStorage
 import com.taoufikcode.core.domain.util.DataError
 import com.taoufikcode.core.domain.util.EmptyResult
 import com.taoufikcode.core.domain.util.Result
 import com.taoufikcode.core.domain.util.map
 import com.taoufikcode.core.domain.util.onSuccess
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlin.time.Clock
 
 class ChatRepositoryImpl(
     private val chatRemoteDataSource: ChatRemoteDataSource,
     private val chatSyncDataSource: ChatSyncData,
     private val chatLocalDataBase: KrossChatDatabase,
+    private val sessionStorage: SessionStorage,
 ) : ChatRepository {
 
     override suspend fun searchParticipant(query: String): Result<ChatParticipant, DataError.Remote> {
@@ -43,19 +50,33 @@ class ChatRepositoryImpl(
     }
 
     override fun observeChats(): Flow<List<Chat>> {
-        return chatLocalDataBase.chatDao.getChatsWithParticipants()
-            .map { allChatsWithParticipants ->
-                val activeParticipantIdsByChat = chatLocalDataBase
-                    .chatParticipantsJoinDao
-                    .getActiveParticipantRefs()
-                    .groupBy({ it.chatId }, { it.userId })
+        val currentUserId = sessionStorage.observeAuthInfo().map { it?.user?.id }
 
-                allChatsWithParticipants.map { chatWithParticipants ->
-                    chatWithParticipants.copy(
-                        participants = chatWithParticipants.participants.filter {
-                            it.userId in activeParticipantIdsByChat[chatWithParticipants.chat.chatId].orEmpty()
-                        }
-                    ).toDomain()
+        return combine(
+            chatLocalDataBase.chatDao.getChatsWithParticipants(),
+            currentUserId
+        ) { chats, userId -> chats to userId }
+            .flatMapLatest { (allChatsWithParticipants, userId) ->
+                val unreadCounts = userId
+                    ?.let { chatLocalDataBase.messageDao.observeUnreadCounts(it) }
+                    ?: flowOf(emptyList())
+
+                unreadCounts.map { counts ->
+                    val unreadCountByChat = counts.associate { it.chatId to it.unreadCount }
+                    val activeParticipantIdsByChat = chatLocalDataBase
+                        .chatParticipantsJoinDao
+                        .getActiveParticipantRefs()
+                        .groupBy({ it.chatId }, { it.userId })
+
+                    allChatsWithParticipants.map { chatWithParticipants ->
+                        chatWithParticipants.copy(
+                            participants = chatWithParticipants.participants.filter {
+                                it.userId in activeParticipantIdsByChat[chatWithParticipants.chat.chatId].orEmpty()
+                            }
+                        ).toDomain().copy(
+                            unreadCount = unreadCountByChat[chatWithParticipants.chat.chatId] ?: 0
+                        )
+                    }
                 }
             }
     }
@@ -98,6 +119,16 @@ class ChatRepositoryImpl(
                     crossRefDao = chatLocalDataBase.chatParticipantsJoinDao,
                     messageDao = chatLocalDataBase.messageDao
                 )
+
+                // Chats synced for the first time on this device/session (e.g. after
+                // login) start out with no local read-state row. Without a baseline,
+                // COALESCE(lastReadAt, 0) would treat their entire history as unread.
+                // Seed "read up to now" only where no row exists yet, so pre-existing
+                // history stays read and only messages arriving after this point count.
+                val now = Clock.System.now().toEpochMilliseconds()
+                chatLocalDataBase.chatReadStateDao.insertReadStatesIfAbsent(
+                    chats.map { chat -> ChatReadStateEntity(chatId = chat.id, lastReadAt = now) }
+                )
             }
     }
 
@@ -126,6 +157,15 @@ class ChatRepositoryImpl(
 
     override suspend fun deleteAllChats() {
         chatLocalDataBase.chatDao.deleteAllChats()
+    }
+
+    override suspend fun markChatAsRead(chatId: String) {
+        chatLocalDataBase.chatReadStateDao.upsertReadState(
+            ChatReadStateEntity(
+                chatId = chatId,
+                lastReadAt = Clock.System.now().toEpochMilliseconds()
+            )
+        )
     }
 
     private suspend fun cacheChat(chat: Chat) {

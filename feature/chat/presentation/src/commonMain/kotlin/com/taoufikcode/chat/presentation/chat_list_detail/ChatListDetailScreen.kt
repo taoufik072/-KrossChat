@@ -88,14 +88,13 @@ fun ChatListDetailScreen(
                             scaffoldNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
                         }
                     },
-                    onConfirmLogoutClick = onLogout,
                     onCreateChatClick = {
                         onAction(ChatListDetailAction.OnCreateChatClick)
                     },
-
                     onProfileSettingsClick = {
                         onAction(ChatListDetailAction.OnProfileSettingsClick)
                     },
+                    onSuccessfulLogout = onLogout
                 )
             }
         },

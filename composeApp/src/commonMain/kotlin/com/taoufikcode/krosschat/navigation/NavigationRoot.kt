@@ -24,7 +24,14 @@ fun NavigationRoot(navController: NavHostController,startDestination: Any) {
                 }
             })
         chatGraph(
-            navController = navController
+            navController = navController,
+            onLogout = {
+                navController.navigate(AuthGraphRoutes.Graph) {
+                    popUpTo(ChatGraphRoutes.Graph) {
+                        inclusive = true
+                    }
+                }
+            }
         )
     }
 }

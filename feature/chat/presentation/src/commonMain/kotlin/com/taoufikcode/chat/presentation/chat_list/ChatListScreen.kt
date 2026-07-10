@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -36,6 +37,8 @@ import com.taoufikcode.core.designsystem.theme.KrossChatTheme
 import com.taoufikcode.core.designsystem.theme.extended
 import com.taoufikcode.core.presentation.permissions.Permissions
 import com.taoufikcode.core.presentation.permissions.rememberPermissionController
+import com.taoufikcode.core.presentation.utils.ObserveAsEvents
+import kotlinx.coroutines.launch
 import krosschat.feature.chat.presentation.generated.resources.Res
 import krosschat.feature.chat.presentation.generated.resources.cancel
 import krosschat.feature.chat.presentation.generated.resources.create_chat
@@ -52,9 +55,9 @@ import org.koin.compose.viewmodel.koinViewModel
 fun ChatListRoot(
     selectedChatId: String?,
     onChatClick: (String?) -> Unit,
-    onConfirmLogoutClick: () -> Unit,
     onCreateChatClick: () -> Unit,
     onProfileSettingsClick: () -> Unit,
+    onSuccessfulLogout: () -> Unit,
     viewModel: ChatListViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -69,18 +72,32 @@ fun ChatListRoot(
         permissionController.requestPermission(Permissions.NOTIFICATIONS)
     }
 
+    val scope = rememberCoroutineScope()
+    ObserveAsEvents(viewModel.events) { event ->
+        when(event) {
+            is ChatListEvent.OnLogoutError -> {
+                scope.launch {
+                    snackbarHostState.showSnackbar(
+                        message = event.error.asStringAsync()
+                    )
+                }
+            }
+            ChatListEvent.OnLogoutSuccess -> onSuccessfulLogout()
+        }
+    }
+
     ChatListScreen(
         state = state,
         onAction = { action ->
             when (action) {
                 is ChatListAction.OnSelectChat -> onChatClick(action.chatId)
-                ChatListAction.OnConfirmLogout -> onConfirmLogoutClick()
                 ChatListAction.OnCreateChatClick -> onCreateChatClick()
                 ChatListAction.OnProfileSettingsClick -> onProfileSettingsClick()
                 else -> Unit
             }
             viewModel.onAction(action)
-        }, snackbarHostState = snackbarHostState
+        },
+        snackbarHostState = snackbarHostState
     )
 }
 

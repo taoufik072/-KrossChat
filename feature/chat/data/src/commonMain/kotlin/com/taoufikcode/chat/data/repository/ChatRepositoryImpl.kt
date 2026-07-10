@@ -124,6 +124,10 @@ class ChatRepositoryImpl(
             .onSuccess { chat -> cacheChat(chat) }
     }
 
+    override suspend fun deleteAllChats() {
+        chatLocalDataBase.chatDao.deleteAllChats()
+    }
+
     private suspend fun cacheChat(chat: Chat) {
         chatLocalDataBase.chatDao.upsertChatWithParticipantsAndCrossRefs(
             chat = chat.toEntity(),

@@ -4,6 +4,7 @@ import com.taoufikcode.core.data.dto.AuthInfoDto
 import com.taoufikcode.core.data.dto.ChangePasswordDto
 import com.taoufikcode.core.data.dto.EmailDto
 import com.taoufikcode.core.data.dto.LoginDto
+import com.taoufikcode.core.data.dto.RefreshDto
 import com.taoufikcode.core.data.dto.RegisterDto
 import com.taoufikcode.core.data.dto.ResetPasswordDto
 import com.taoufikcode.core.data.dto.toDomain
@@ -15,7 +16,11 @@ import com.taoufikcode.core.domain.util.DataError
 import com.taoufikcode.core.domain.util.EmptyResult
 import com.taoufikcode.core.domain.util.Result
 import com.taoufikcode.core.domain.util.map
+import com.taoufikcode.core.domain.util.onSuccess
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.auth.authProvider
+import io.ktor.client.plugins.auth.providers.BearerAuthProvider
+import io.ktor.client.request.post
 
 class AuthRepository(private val httpClient: HttpClient
 ): AuthService {
@@ -90,5 +95,13 @@ class AuthRepository(private val httpClient: HttpClient
                 newPassword = newPassword
             )
         )
+    }
+    override suspend fun logout(refreshToken: String): EmptyResult<DataError.Remote> {
+        return httpClient.post<RefreshDto, Unit>(
+            route = "/auth/logout",
+            body = RefreshDto(refreshToken)
+        ).onSuccess {
+            httpClient.authProvider<BearerAuthProvider>()?.clearToken()
+        }
     }
 }

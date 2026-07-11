@@ -20,7 +20,7 @@ import com.taoufikcode.core.designsystem.theme.KrossChatTheme
 import com.taoufikcode.core.designsystem.theme.extended
 import com.taoufikcode.core.presentation.utils.DeviceConfiguration
 import com.taoufikcode.core.presentation.utils.currentDeviceConfiguration
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun ProfileSectionLayout(

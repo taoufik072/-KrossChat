@@ -32,7 +32,7 @@ import com.taoufikcode.core.presentation.utils.currentDeviceConfiguration
 import krosschat.feature.chat.presentation.generated.resources.Res
 import krosschat.feature.chat.presentation.generated.resources.cancel
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun ParticipantPickerScreen(

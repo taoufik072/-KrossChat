@@ -25,7 +25,7 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 implementation(projects.core.domain)
-                implementation(compose.components.resources)
+                implementation(libs.jetbrains.compose.components.resources)
                 implementation(libs.material3.adaptive)
                 implementation(libs.bundles.koin.common)
                 implementation(libs.kotlinx.datetime)

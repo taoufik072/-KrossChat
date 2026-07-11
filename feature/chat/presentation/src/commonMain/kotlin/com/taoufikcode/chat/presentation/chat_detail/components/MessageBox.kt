@@ -31,7 +31,7 @@ import krosschat.feature.chat.presentation.generated.resources.send
 import krosschat.feature.chat.presentation.generated.resources.send_a_message
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 import krosschat.core.designsystem.generated.resources.Res as DesignSystemRes
 
 @Composable

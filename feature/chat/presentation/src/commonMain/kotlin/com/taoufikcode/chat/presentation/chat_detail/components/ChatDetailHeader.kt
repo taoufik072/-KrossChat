@@ -38,7 +38,7 @@ import krosschat.feature.chat.presentation.generated.resources.leave_chat
 import krosschat.feature.chat.presentation.generated.resources.open_chat_options_menu
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 import kotlin.time.Clock
 import krosschat.core.designsystem.generated.resources.Res as DesignSystemRes
 

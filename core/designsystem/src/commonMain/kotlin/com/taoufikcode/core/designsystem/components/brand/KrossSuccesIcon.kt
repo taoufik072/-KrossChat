@@ -9,7 +9,7 @@ import com.taoufikcode.core.designsystem.theme.extended
 import krosschat.core.designsystem.generated.resources.Res
 import krosschat.core.designsystem.generated.resources.success_checkmark
 import org.jetbrains.compose.resources.vectorResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun KrossSuccessIcon(

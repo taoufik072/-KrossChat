@@ -29,7 +29,7 @@ import krosschat.feature.chat.presentation.generated.resources.retry
 import krosschat.feature.chat.presentation.generated.resources.you
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun CurrentUserMessage(

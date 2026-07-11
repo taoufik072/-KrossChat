@@ -11,7 +11,7 @@ import com.taoufikcode.core.presentation.utils.ObserveAsEvents
 import com.taoufikcode.krosschat.navigation.DeepLinkListener
 import com.taoufikcode.krosschat.navigation.NavigationRoot
 import com.taoufikcode.presentation.navigation.AuthGraphRoutes
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

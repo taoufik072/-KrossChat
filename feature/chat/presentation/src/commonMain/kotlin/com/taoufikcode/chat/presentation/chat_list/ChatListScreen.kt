@@ -48,7 +48,7 @@ import krosschat.feature.chat.presentation.generated.resources.logout
 import krosschat.feature.chat.presentation.generated.resources.no_chats
 import krosschat.feature.chat.presentation.generated.resources.no_chats_subtitle
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

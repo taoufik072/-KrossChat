@@ -20,7 +20,7 @@ import com.taoufikcode.core.designsystem.theme.KrossChatTheme
 import krosschat.core.designsystem.generated.resources.Res
 import krosschat.core.designsystem.generated.resources.logo_kross
 import org.jetbrains.compose.resources.vectorResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun KrossSurface(

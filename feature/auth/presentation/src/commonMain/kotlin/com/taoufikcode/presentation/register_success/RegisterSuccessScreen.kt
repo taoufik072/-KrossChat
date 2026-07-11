@@ -31,7 +31,7 @@ import krosschat.feature.auth.presentation.generated.resources.resent_verificati
 import krosschat.feature.auth.presentation.generated.resources.verification_email_sent_to_x
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

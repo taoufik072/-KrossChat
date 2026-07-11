@@ -32,7 +32,7 @@ import krosschat.feature.auth.presentation.generated.resources.username_hint
 import krosschat.feature.auth.presentation.generated.resources.username_placeholder
 import krosschat.feature.auth.presentation.generated.resources.welcome_to_kross
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

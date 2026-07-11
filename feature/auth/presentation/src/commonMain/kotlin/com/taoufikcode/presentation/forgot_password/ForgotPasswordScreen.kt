@@ -26,7 +26,7 @@ import krosschat.feature.auth.presentation.generated.resources.forgot_password
 import krosschat.feature.auth.presentation.generated.resources.forgot_password_email_sent_successfully
 import krosschat.feature.auth.presentation.generated.resources.submit
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

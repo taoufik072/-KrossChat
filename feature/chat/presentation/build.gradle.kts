@@ -19,8 +19,8 @@ kotlin {
                 implementation(projects.core.designsystem)
                 // Add KMP dependencies here
 
-                implementation(compose.components.resources)
-                implementation(compose.components.uiToolingPreview)
+                implementation(libs.jetbrains.compose.components.resources)
+                implementation(libs.jetbrains.compose.ui.tooling.preview)
 
                 implementation(libs.material3.adaptive)
                 implementation(libs.material3.adaptive.layout)

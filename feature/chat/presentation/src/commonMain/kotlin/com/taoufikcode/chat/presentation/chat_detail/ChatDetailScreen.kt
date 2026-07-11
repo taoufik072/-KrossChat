@@ -60,7 +60,7 @@ import krosschat.feature.chat.presentation.generated.resources.Res
 import krosschat.feature.chat.presentation.generated.resources.no_chat_selected
 import krosschat.feature.chat.presentation.generated.resources.select_a_chat
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.time.Clock
 import kotlin.uuid.ExperimentalUuidApi

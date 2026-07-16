@@ -5,6 +5,36 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 
+/**
+ * plugins {
+ *     id("com.android.application")
+ * }
+ *
+ * android {
+ *     namespace = "com.taoufikcode.krosschat"
+ *     compileSdk = libs.versions.projectCompileSdkVersion.get().toInt()
+ *
+ *     defaultConfig {
+ *         applicationId = libs.versions.projectApplicationId.get()
+ *         minSdk = libs.versions.projectMinSdkVersion.get().toInt()
+ *         targetSdk = libs.versions.projectTargetSdkVersion.get().toInt()
+ *         versionCode = libs.versions.projectVersionCode.get().toInt()
+ *         versionName = libs.versions.projectVersionName.get()
+ *     }
+ *     packaging {
+ *         resources {
+ *             excludes += "/META-INF/AL2.0"
+ *             excludes += "/META-INF/LGPL2.1"
+ *         }
+ *     }
+ *     buildTypes {
+ *         release {
+ *             isMinifyEnabled = false
+ *         }
+ *     }
+ *      [configureKotlinAndroid]
+ * }
+ */
 @Suppress("unused") // implementationClass **  com.taoufikcode.android.application **
 class AndroidApplicationPlugin: Plugin<Project>{
 

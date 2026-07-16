@@ -4,6 +4,13 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
 
+/**
+ * plugins {
+ *     id("com.taoufikcode.android.application")
+ *     id("org.jetbrains.kotlin.plugin.compose")
+ * }
+ * ```
+ */
 @Suppress("unused") // implementationClass in /convention/build.gradle.kts
 class AndroidApplicationComposePlugin: Plugin<Project> {
     override fun apply(target: Project) {

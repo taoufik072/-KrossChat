@@ -4,6 +4,31 @@ import org.gradle.api.Project
 import org.gradle.internal.Actions.with
 import org.gradle.kotlin.dsl.dependencies
 
+/**
+ * plugins {
+ *     id("com.taoufikcode.kmp.library")
+ *     id("org.jetbrains.kotlin.plugin.compose")
+ *     id("org.jetbrains.compose")
+ * }
+ *
+ * kotlin {
+ *     sourceSets {
+ *         commonMain.dependencies {
+ *             implementation(compose.ui)
+ *             implementation(compose.foundation)
+ *             implementation(compose.material3)
+ *             implementation(compose.materialIconsCore)
+ *         }
+ *         androidMain.dependencies {
+ *             implementation(libs.androidx.activity.compose)
+ *         }
+ *     }
+ * }
+ *
+ * dependencies {
+ *     add("androidRuntimeClasspath", libs.androidx.compose.ui.tooling)
+ * }
+ */
 @Suppress("unused") // implementationClass in /convention/build.gradle.kts
 class CmpLibraryPlugin : Plugin<Project> {
     override fun apply(target: Project) {

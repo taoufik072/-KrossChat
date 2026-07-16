@@ -4,9 +4,6 @@ plugins {
 
 kotlin {
     sourceSets {
-        androidMain.dependencies {
-            implementation(compose.preview)
-        }
         commonMain.dependencies {
             implementation(projects.core.designsystem)
             implementation(projects.core.data)

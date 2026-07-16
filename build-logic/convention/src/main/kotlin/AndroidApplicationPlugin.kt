@@ -5,7 +5,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 
-@Suppress("unused") // implementationClass in /convention/build.gradle.kts
+@Suppress("unused") // implementationClass **  com.taoufikcode.android.application **
 class AndroidApplicationPlugin: Plugin<Project>{
 
     override fun apply(target: Project) {

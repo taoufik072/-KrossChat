@@ -28,6 +28,12 @@ kotlin {
             }
         }
 
+        commonTest {
+            dependencies {
+                implementation(libs.ktor.client.mock)
+            }
+        }
+
         androidMain {
             dependencies {
                 // Add Android-specific dependencies here. Note that this source set depends on

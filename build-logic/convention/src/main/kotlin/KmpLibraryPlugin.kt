@@ -26,6 +26,9 @@ import org.gradle.kotlin.dsl.dependencies
  *         }
  *         commonTest.dependencies {
  *             implementation(libs.kotlin.test)
+ *             implementation(libs.kotlinx.coroutines.test)
+ *             implementation(libs.turbine)
+ *             implementation(libs.assertk)
  *         }
  *     }
  * }
@@ -47,6 +50,11 @@ class KmpLibraryPlugin : Plugin<Project> {
                     dependency = libs.findLibrary("kotlinx-serialization-json").get()
                 )
                 "commonTestImplementation"(dependency = libs.findLibrary("kotlin-test").get())
+                "commonTestImplementation"(
+                    dependency = libs.findLibrary("kotlinx-coroutines-test").get()
+                )
+                "commonTestImplementation"(dependency = libs.findLibrary("turbine").get())
+                "commonTestImplementation"(dependency = libs.findLibrary("assertk").get())
             }
         }
     }

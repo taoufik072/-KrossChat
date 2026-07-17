@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
  *         androidResources {
  *             enable = true
  *         }
+ *         withHostTest {}
  *     }
  *     listOf(
  *         iosArm64(),
@@ -52,6 +53,8 @@ internal fun Project.configureKotlinMultiplatform(){
             androidResources {
                 enable = true
             }
+
+            withHostTest {}
         }
 
         listOf(

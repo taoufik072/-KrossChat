@@ -1,0 +1,211 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+    <ManuallySuppressedIssues />
+    <CurrentIssues>
+        <ID>CyclomaticComplexMethod:ChatDetailViewModel.kt$ChatDetailViewModel$fun onAction(action:
+            ChatDetailAction)
+        </ID>
+        <ID>CyclomaticComplexMethod:DataErrorToUi.kt$fun DataError.toUiText(): UiText</ID>
+        <ID>CyclomaticComplexMethod:KrossButton.kt$@Composable fun KrossButton( text: String,
+            onClick: () -&gt; Unit, modifier: Modifier = Modifier, style: KrossButtonStyle =
+            KrossButtonStyle.PRIMARY, enabled: Boolean = true, isLoading: Boolean = false,
+            leadingIcon: @Composable (() -&gt; Unit)? = null )
+        </ID>
+        <ID>FunctionNaming:MainViewController.kt$fun MainViewController()</ID>
+        <ID>LongMethod:AuthGraph.kt$fun NavGraphBuilder.authGraph( navController: NavController,
+            onLoginSuccess: () -&gt; Unit, )
+        </ID>
+        <ID>LongMethod:HttpClientFactory.kt$HttpClientFactory$fun create(httpClientEngine:
+            HttpClientEngine): HttpClient
+        </ID>
+        <ID>LongParameterList:KtorWebSocketConnector.kt$KtorWebSocketConnector$( private val
+            httpClient: HttpClient, private val logger: KrossChatLogger, private val json: Json,
+            private val connectionErrorHandler: ConnectionErrorHandler, private val
+            connectionRetryHandler: ConnectionRetryHandler, appLifecycleObserver:
+            AppLifecycleObserver, connectivityObserver: ConnectivityObserver, applicationScope:
+            CoroutineScope, sessionStorage: SessionStorage, )
+        </ID>
+        <ID>LoopWithTooManyJumpStatements:rememberImagePickerLauncher.ios.kt$&lt;no name provided&gt;$for</ID>
+        <ID>MagicNumber:AddParticipantsViewModel.kt$AddParticipantsViewModel$5_000L</ID>
+        <ID>MagicNumber:ChatDetailViewModel.kt$ChatDetailViewModel$5_000L</ID>
+        <ID>MagicNumber:ChatListDetailViewModel.kt$ChatListDetailViewModel$5_000L</ID>
+        <ID>MagicNumber:ChatListViewModel.kt$ChatListViewModel$5_000L</ID>
+        <ID>MagicNumber:Color.kt$0x14101C28</ID>
+        <ID>MagicNumber:Color.kt$0x1AF5F7F8</ID>
+        <ID>MagicNumber:Color.kt$0x2698E4FF</ID>
+        <ID>MagicNumber:Color.kt$0x26A0FFE0</ID>
+        <ID>MagicNumber:Color.kt$0x26A2C0FF</ID>
+        <ID>MagicNumber:Color.kt$0x26A6FFCC</ID>
+        <ID>MagicNumber:Color.kt$0x26C2FFA6</ID>
+        <ID>MagicNumber:Color.kt$0x26CAADFF</ID>
+        <ID>MagicNumber:Color.kt$0x26D0D7DD</ID>
+        <ID>MagicNumber:Color.kt$0x26FCB6FF</ID>
+        <ID>MagicNumber:Color.kt$0x26FEC5A7</ID>
+        <ID>MagicNumber:Color.kt$0x26FEF4A5</ID>
+        <ID>MagicNumber:Color.kt$0x26FF8A95</ID>
+        <ID>MagicNumber:Color.kt$0x26FFA6AF</ID>
+        <ID>MagicNumber:Color.kt$0x665B5EF4</ID>
+        <ID>MagicNumber:Color.kt$0xCC101C28</ID>
+        <ID>MagicNumber:Color.kt$0xFF07071E</ID>
+        <ID>MagicNumber:Color.kt$0xFF0D0D50</ID>
+        <ID>MagicNumber:Color.kt$0xFF101C28</ID>
+        <ID>MagicNumber:Color.kt$0xFF1C2A39</ID>
+        <ID>MagicNumber:Color.kt$0xFF1E20CC</ID>
+        <ID>MagicNumber:Color.kt$0xFF2F3F4F</ID>
+        <ID>MagicNumber:Color.kt$0xFF475767</ID>
+        <ID>MagicNumber:Color.kt$0xFF5B5EF4</ID>
+        <ID>MagicNumber:Color.kt$0xFF667685</ID>
+        <ID>MagicNumber:Color.kt$0xFF8597A9</ID>
+        <ID>MagicNumber:Color.kt$0xFF9DADBE</ID>
+        <ID>MagicNumber:Color.kt$0xFFAA142A</ID>
+        <ID>MagicNumber:Color.kt$0xFFD0D7DD</ID>
+        <ID>MagicNumber:Color.kt$0xFFD9E8FF</ID>
+        <ID>MagicNumber:Color.kt$0xFFD9FFF2</ID>
+        <ID>MagicNumber:Color.kt$0xFFDA233E</ID>
+        <ID>MagicNumber:Color.kt$0xFFDCE0E5</ID>
+        <ID>MagicNumber:Color.kt$0xFFDDDFFE</ID>
+        <ID>MagicNumber:Color.kt$0xFFDEFFD9</ID>
+        <ID>MagicNumber:Color.kt$0xFFE0FFE8</ID>
+        <ID>MagicNumber:Color.kt$0xFFE6D9FF</ID>
+        <ID>MagicNumber:Color.kt$0xFFF0D9FF</ID>
+        <ID>MagicNumber:Color.kt$0xFFF5F7F8</ID>
+        <ID>MagicNumber:Color.kt$0xFFFF7987</ID>
+        <ID>MagicNumber:Color.kt$0xFFFFD9DC</ID>
+        <ID>MagicNumber:Color.kt$0xFFFFE0E6</ID>
+        <ID>MagicNumber:Color.kt$0xFFFFE8D9</ID>
+        <ID>MagicNumber:Color.kt$0xFFFFF9D9</ID>
+        <ID>MagicNumber:Color.kt$0xFFFFFFFF</ID>
+        <ID>MagicNumber:ConnectionRetryHandler.kt$ConnectionRetryHandler$2000L</ID>
+        <ID>MagicNumber:ConnectionRetryHandler.kt$ConnectionRetryHandler$30_000L</ID>
+        <ID>MagicNumber:CreateChatViewModel.kt$CreateChatViewModel$5_000L</ID>
+        <ID>MagicNumber:EmailVerificationViewModel.kt$EmailVerificationViewModel$5_000L</ID>
+        <ID>MagicNumber:ForgotPasswordViewModel.kt$ForgotPasswordViewModel$5_000L</ID>
+        <ID>MagicNumber:HttpClientExt.kt$200</ID>
+        <ID>MagicNumber:HttpClientExt.kt$299</ID>
+        <ID>MagicNumber:HttpClientExt.kt$400</ID>
+        <ID>MagicNumber:HttpClientExt.kt$401</ID>
+        <ID>MagicNumber:HttpClientExt.kt$403</ID>
+        <ID>MagicNumber:HttpClientExt.kt$404</ID>
+        <ID>MagicNumber:HttpClientExt.kt$408</ID>
+        <ID>MagicNumber:HttpClientExt.kt$409</ID>
+        <ID>MagicNumber:HttpClientExt.kt$413</ID>
+        <ID>MagicNumber:HttpClientExt.kt$429</ID>
+        <ID>MagicNumber:HttpClientExt.kt$500</ID>
+        <ID>MagicNumber:HttpClientExt.kt$503</ID>
+        <ID>MagicNumber:HttpClientFactory.kt$HttpClientFactory$30_000L</ID>
+        <ID>MagicNumber:KtorWebSocketConnector.kt$KtorWebSocketConnector$5000</ID>
+        <ID>MagicNumber:KtorWebSocketConnector.kt$KtorWebSocketConnector$5000L</ID>
+        <ID>MagicNumber:LoginViewModel.kt$LoginViewModel$5_000L</ID>
+        <ID>MagicNumber:MainViewModel.kt$MainViewModel$5_000L</ID>
+        <ID>MagicNumber:ProfileViewModel.kt$ProfileViewModel$5_000L</ID>
+        <ID>MagicNumber:RegisterSuccessViewModel.kt$RegisterSuccessViewModel$5_000L</ID>
+        <ID>MagicNumber:RegisterViewModel.kt$RegisterViewModel$20</ID>
+        <ID>MagicNumber:RegisterViewModel.kt$RegisterViewModel$3</ID>
+        <ID>MagicNumber:RegisterViewModel.kt$RegisterViewModel$5_000L</ID>
+        <ID>MagicNumber:ResetPasswordViewModel.kt$ResetPasswordViewModel$5_000L</ID>
+        <ID>MagicNumber:WebSocketChatConnectionClient.kt$WebSocketChatConnectionClient$5000</ID>
+        <ID>MatchingDeclarationName:KrossAvatarPhoto.kt$AvatarSize</ID>
+        <ID>MatchingDeclarationName:KrossButton.kt$KrossButtonStyle</ID>
+        <ID>MatchingDeclarationName:Permission.kt$Permissions</ID>
+        <ID>MatchingDeclarationName:PermissionController.mobile.kt$PermissionController</ID>
+        <ID>MatchingDeclarationName:Platform.android.kt$AndroidPlatform : Platform</ID>
+        <ID>MatchingDeclarationName:Platform.ios.kt$IOSPlatform : Platform</ID>
+        <ID>MaxLineLength:ChatDetailScreen.kt$content = "lorem ipsum dolor sit amet consectetur
+            adipiscing elit sed" + " do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        </ID>
+        <ID>MaxLineLength:ChatRemoteDataSource.kt$ChatRemoteDataSource$suspend</ID>
+        <ID>MaxLineLength:KrossChatBubble.kt$" took a 1914 Cicero translation and scrambled it to
+            make dummy text for Letraset's Body Type sheets. "
+        </ID>
+        <ID>ReturnCount:ChatMessageRepositoryImpl.kt$ChatMessageRepositoryImpl$override suspend fun
+            retryMessage(messageId: String): EmptyResult&lt;DataError&gt;
+        </ID>
+        <ID>ReturnCount:ChatMessageRepositoryImpl.kt$ChatMessageRepositoryImpl$override suspend fun
+            sendMessage(message: OutgoingNewMessage): EmptyResult&lt;DataError&gt;
+        </ID>
+        <ID>ReturnCount:ConnectionErrorHandler.ios.kt$ConnectionErrorHandler$actual fun
+            transformException(exception: Throwable): Throwable
+        </ID>
+        <ID>ReturnCount:ConnectionErrorHandler.ios.kt$ConnectionErrorHandler$private fun
+            Throwable.toNSError(): NSError?
+        </ID>
+        <ID>ReturnCount:ConnectionErrorHandler.ios.kt$ConnectionErrorHandler$private fun
+            extractNsError(cause: Throwable): NSError?
+        </ID>
+        <ID>ReturnCount:ProfileRepositoryImpl.kt$ProfileRepositoryImpl$override suspend fun
+            uploadProfilePicture( imageBytes: ByteArray, mimeType: String ): EmptyResult&lt;DataError.Remote&gt;
+        </ID>
+        <ID>SpreadOperator:UiText.kt$UiText$(id, *args)</ID>
+        <ID>SwallowedException:HttpClientExt.android.kt$e: ConnectException</ID>
+        <ID>SwallowedException:HttpClientExt.android.kt$e: Exception</ID>
+        <ID>SwallowedException:HttpClientExt.android.kt$e: HttpRequestTimeoutException</ID>
+        <ID>SwallowedException:HttpClientExt.android.kt$e: SerializationException</ID>
+        <ID>SwallowedException:HttpClientExt.android.kt$e: SocketTimeoutException</ID>
+        <ID>SwallowedException:HttpClientExt.android.kt$e: UnknownHostException</ID>
+        <ID>SwallowedException:HttpClientExt.android.kt$e: UnresolvedAddressException</ID>
+        <ID>SwallowedException:HttpClientExt.ios.kt$e: Exception</ID>
+        <ID>SwallowedException:HttpClientExt.ios.kt$e: HttpRequestTimeoutException</ID>
+        <ID>SwallowedException:HttpClientExt.ios.kt$e: SerializationException</ID>
+        <ID>SwallowedException:HttpClientExt.ios.kt$e: UnresolvedAddressException</ID>
+        <ID>SwallowedException:HttpClientExt.kt$e: NoTransformationFoundException</ID>
+        <ID>
+            TooGenericExceptionCaught:FirebasePushNotificationService.android.kt$FirebasePushNotificationService$e:
+            Exception
+        </ID>
+        <ID>TooGenericExceptionCaught:HttpClientExt.android.kt$e: Exception</ID>
+        <ID>TooGenericExceptionCaught:HttpClientExt.ios.kt$e: Exception</ID>
+        <ID>TooGenericExceptionCaught:KtorWebSocketConnector.kt$KtorWebSocketConnector$e:
+            Exception
+        </ID>
+        <ID>TooGenericExceptionCaught:Paginator.kt$Paginator$e: Exception</ID>
+        <ID>TooManyFunctions:ChatDao.kt$ChatDao</ID>
+        <ID>TooManyFunctions:ChatDetailViewModel.kt$ChatDetailViewModel : ViewModel</ID>
+        <ID>TooManyFunctions:ChatRemoteDataSource.kt$ChatRemoteDataSource</ID>
+        <ID>TooManyFunctions:ChatRepository.kt$ChatRepository</ID>
+        <ID>TooManyFunctions:ChatRepositoryImpl.kt$ChatRepositoryImpl : ChatRepository</ID>
+        <ID>UnusedParameter:ChatGraphRoutes.kt$navController: NavController</ID>
+        <ID>UnusedParameter:ConnectionRetryHandler.kt$ConnectionRetryHandler$attempt: Long</ID>
+        <ID>UnusedParameter:EmailVerificationViewModel.kt$EmailVerificationViewModel$action:
+            EmailVerificationAction
+        </ID>
+        <ID>UnusedPrivateMember:ChatDetailScreen.kt$@OptIn(ExperimentalUuidApi::class) @Preview
+            @Composable private fun ChatDetailMessagesPreview()
+        </ID>
+        <ID>UnusedPrivateMember:ChatDetailScreen.kt$@Preview @Composable private fun
+            ChatDetailEmptyPreview()
+        </ID>
+        <ID>UnusedPrivateMember:EmailVerificationScreen.kt$@Preview @Composable private fun
+            EmailVerificationErrorPreview()
+        </ID>
+        <ID>UnusedPrivateMember:EmailVerificationScreen.kt$@Preview @Composable private fun
+            EmailVerificationSuccessPreview()
+        </ID>
+        <ID>UnusedPrivateMember:EmailVerificationScreen.kt$@Preview @Composable private fun
+            EmailVerificationVerifyingPreview()
+        </ID>
+        <ID>UnusedPrivateMember:LoginScreen.kt$@Preview @Composable private fun DarkThemePreview()
+        </ID>
+        <ID>UnusedPrivateMember:LoginScreen.kt$@Preview @Composable private fun
+            LightThemePreview()
+        </ID>
+        <ID>UnusedPrivateMember:ParticipantPickerScreen.kt$@Preview @Composable private fun
+            ParticipantPickerScreenPreview()
+        </ID>
+        <ID>UnusedPrivateMember:ParticipantPickerScreen.kt$@Preview @Composable private fun
+            ParticipantPickerScreenSearchingPreview()
+        </ID>
+        <ID>UnusedPrivateMember:ProfileSectionLayout.kt$@Preview @Composable private fun
+            ProfileSectionLayoutPreview()
+        </ID>
+        <ID>UseCheckOrError:DialogSheetScopedViewModel.kt$throw IllegalStateException("No parent
+            owner found")
+        </ID>
+        <ID>UseCheckOrError:RegisterSuccessViewModel.kt$RegisterSuccessViewModel$throw
+            IllegalStateException("No email passed to register success screen")
+        </ID>
+        <ID>UseCheckOrError:ResetPasswordViewModel.kt$ResetPasswordViewModel$throw
+            IllegalStateException("No password reset token")
+        </ID>
+        <ID>WildcardImport:ExampleInstrumentedTest.kt$import org.junit.Assert.*</ID>
+    </CurrentIssues>
+</SmellBaseline>

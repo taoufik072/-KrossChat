@@ -52,6 +52,11 @@ kermit ="2.1.0"
 turbine = "1.2.1"
 assertk = "0.28.1"
 
+# Code quality
+kover = "0.9.8" # applied in settings.gradle.kts (version catalog not available there)
+detekt = "1.23.8"
+sonarqube = "7.3.1.8318"
+
 projectApplicationId = "com.taoufikcode.krosschat"
 projectVersionName = "1.0"
 projectMinSdkVersion = "26"
@@ -211,6 +216,10 @@ room = { id = "androidx.room", version.ref = "room" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfig" }
+
+# Code quality
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 
 [bundles]
 koin-common = [

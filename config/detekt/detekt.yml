@@ -1,0 +1,35 @@
+# Overrides on top of detekt's default config (buildUponDefaultConfig = true).
+# Kept minimal: only rules that fight this codebase's KMP/Compose conventions.
+
+style:
+  MaxLineLength:
+    maxLineLength: 120
+  NewLineAtEndOfFile:
+    active: false
+  MagicNumber:
+    # Compose UI is full of literal dp/fraction values by design.
+    ignoreAnnotated: [ 'Composable' ]
+    excludes:
+      - '**/commonTest/**'
+      - '**/androidHostTest/**'
+      - '**/iosTest/**'
+
+naming:
+  PackageNaming:
+    # This codebase uses snake_case feature packages (chat_detail, forgot_password).
+    packagePattern: '[a-z]+(\.[a-z][A-Za-z0-9_]*)*'
+  FunctionNaming:
+    # Composables are PascalCase by convention.
+    ignoreAnnotated: [ 'Composable' ]
+    # Backtick test names; androidHostTest is AGP 9's host-test source set,
+    # which detekt's default test excludes don't know about yet.
+    excludes:
+      - '**/commonTest/**'
+      - '**/androidHostTest/**'
+      - '**/iosTest/**'
+
+complexity:
+  LongMethod:
+    ignoreAnnotated: [ 'Composable' ]
+  LongParameterList:
+    ignoreAnnotated: [ 'Composable' ]

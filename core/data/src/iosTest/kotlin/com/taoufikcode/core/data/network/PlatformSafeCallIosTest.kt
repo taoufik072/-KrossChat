@@ -15,10 +15,6 @@ import platform.Foundation.NSURLErrorNotConnectedToInternet
 import platform.Foundation.NSURLErrorTimedOut
 import kotlin.test.Test
 
-/**
- * Covers the Darwin exception mapping of the iOS actual of [platformSafeCall].
- * Runs via iosSimulatorArm64Test.
- */
 class PlatformSafeCallIosTest {
 
     private fun nsUrlError(code: Long): NSError =

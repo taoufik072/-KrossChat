@@ -31,6 +31,20 @@ dependencyResolutionManagement {
 
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+    id("org.jetbrains.kotlinx.kover.aggregation") version "0.9.8"
+}
+
+kover {
+    enableCoverage()
+    reports {
+        excludedProjects.add(":androidApp")
+        excludedClasses.addAll(
+            "*.BuildKonfig*",
+            "krosschat.*.generated.resources.*",
+            "*ComposableSingletons*",
+            "*Preview*Kt",
+        )
+    }
 }
 
 include(":shared")

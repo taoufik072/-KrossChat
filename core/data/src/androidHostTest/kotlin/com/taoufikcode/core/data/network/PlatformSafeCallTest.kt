@@ -14,10 +14,6 @@ import java.net.UnknownHostException
 import java.nio.channels.UnresolvedAddressException
 import kotlin.test.Test
 
-/**
- * Covers the exception mapping of the Android actual of [platformSafeCall].
- * Lives in androidHostTest because the thrown exception types are JVM-only.
- */
 class PlatformSafeCallTest {
 
     private fun clientThrowing(throwable: Throwable) = testHttpClient(

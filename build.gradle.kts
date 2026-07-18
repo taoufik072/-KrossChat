@@ -41,9 +41,9 @@ tasks.withType<DetektCreateBaselineTask>().configureEach {
 
 sonar {
     properties {
-        property("sonar.projectKey", providers.gradleProperty("sonarProjectKey"))
-        property("sonar.organization", providers.gradleProperty("sonarOrganization"))
-        property("sonar.host.url",providers.gradleProperty("sonarHostUrl"))
+        property("sonar.projectKey", providers.gradleProperty("sonarProjectKey").get())
+        property("sonar.organization", providers.gradleProperty("sonarOrganization").get())
+        property("sonar.host.url", providers.gradleProperty("sonarHostUrl").get())
         property("sonar.coverage.jacoco.xmlReportPaths", "$rootDir/build/reports/kover/report.xml")
         property("sonar.kotlin.detekt.reportPaths", "$rootDir/build/reports/detekt/detekt.xml")
         property("sonar.exclusions", "**/build/**")
